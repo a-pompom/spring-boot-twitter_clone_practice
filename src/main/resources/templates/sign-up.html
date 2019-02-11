@@ -22,7 +22,7 @@
 
         <!-- ユーザ登録 -->
         <div class="login">
-            <form th:action="'/sign-up/save'" class="login-form" th:object="${signUpForm}">
+            <form th:action="@{/sign-up/save}" class="login-form" th:object="${signUpForm}">
                 <p class="login__text">ユーザ登録</p>
                 <input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID" class="field--user_id">
                 <input type="password" th:field="*{dto.user.password}" placeholder="パスワード" class="field--password">

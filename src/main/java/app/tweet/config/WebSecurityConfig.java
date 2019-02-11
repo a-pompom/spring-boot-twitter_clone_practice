@@ -3,6 +3,7 @@ package app.tweet.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -37,6 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		return bCryptPasswordEncoder;
 	}
 	
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
 	/**
 	 * 静的ファイルを除外するための設定
 	 */
@@ -53,23 +60,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/", "sign-up").permitAll()
-			.anyRequest().authenticated()
+				.antMatchers("/", "/sign-up/*").permitAll()
+				.anyRequest().authenticated()
 			.and()
 			.formLogin()
-			.loginPage("/login")
-			.loginPage("/login") //ログインページはコントローラを経由しないのでViewNameとの紐付けが必要
-			.loginProcessingUrl("/sign_in") //フォームのSubmitURL、このURLへリクエストが送られると認証処理が実行される
-			.usernameParameter("userName")
-			.passwordParameter("password")
-			.successForwardUrl("/home/init")
-			.failureUrl("/login?error")
-			.permitAll()
+				.loginPage("/login")
+				.loginPage("/login") //ログインページはコントローラを経由しないのでViewNameとの紐付けが必要
+				.loginProcessingUrl("/sign_in") //フォームのSubmitURL、このURLへリクエストが送られると認証処理が実行される
+				.usernameParameter("userName")
+				.passwordParameter("password")
+				.successForwardUrl("/home/init")
+				.failureUrl("/login?error")
+				.permitAll()
 			.and()
 			.logout()
-			.logoutUrl("/logout")
-			.logoutSuccessUrl("/login?logout")
-			.permitAll();
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login?logout")
+				.permitAll();
 	}
 	
 	@Autowired

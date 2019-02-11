@@ -1,5 +1,5 @@
 package app.tweet.entity;
-// Generated 2019/02/10 10:45:15 by Hibernate Tools 4.3.5.Final
+// Generated 2019/02/11 17:54:56 by Hibernate Tools 4.3.5.Final
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
