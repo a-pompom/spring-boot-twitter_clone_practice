@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link rel="stylesheet" href="../css/normalize.css">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjapanese.css">
+        <title>ログイン</title>
+    </head>
+    <body>
+        <!-- ヘッダ -->
+        <header class="header">
+
+            <div class="header__title">
+            <h2>Test</h2>
+            </div>
+            <div class="header__sub">
+            <a href="#" class="button--nav">ログイン</a>
+            <a href="sigin-up.html" class="button--nav">ユーザ登録</a>
+            </div>
+
+        </header>
+
+        <!-- ログイン -->
+        <div class="login">
+            <form th:action="@{/sign_in}" method="post" class="login-form">
+                <p class="login__text">ログイン</p>
+                <input type="text" name="userName" placeholder="ユーザID" class="field--user_id">
+                <input type="password" name="password" placeholder="パスワード" class="field--password">
+
+                <input type="submit" value="ログイン" class="button--save">
+            </form> 
+        </div>
+    </body>
+</html>
