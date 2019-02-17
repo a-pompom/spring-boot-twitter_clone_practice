@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <link rel="stylesheet" href="../css/normalize.css">
         <link rel="stylesheet" href="../css/style.css">
@@ -31,12 +31,12 @@
 
         <div class="home">
             <!-- 投稿欄 -->
-            <form action="#" class="home__post-form">
+            <form th:action="@{/home/save}" class="home__post-form" th:object="${homeForm}">
 
                 <ul class="post-form__main">
                     <li class="post-form__content"><a href="user.html" class="link--content"><i class="fas fa-smile"></i></a></li>
                     <li class="post-form__content">
-                        <input type="text" name="post" placeholder="いまどうしてる？" class="field--post"></li>
+                        <input type="text" th:field="*{dto.post.post}" placeholder="いまどうしてる？" class="field--post"></li>
                 </ul> 
                 <div class="post-form__sub">
                     <input type="submit" value="投稿" class="button--save">

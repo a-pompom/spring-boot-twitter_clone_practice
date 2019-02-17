@@ -7,7 +7,7 @@ import app.tweet.entity.TmUser;
  * @author aoi
  *
  */
-public class SignUpDTO {
+public class SignUpDto {
 	
 	/**
 	 * ユーザ情報を格納したユーザエンティティ

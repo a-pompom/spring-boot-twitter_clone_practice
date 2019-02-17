@@ -7,10 +7,12 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import app.tweet.base.BaseDao;
 import app.tweet.entity.TmUser;
+import app.tweet.util.QueryBuilder;
 
 @Component
-public class TmUserDao {
+public class TmUserDao extends BaseDao<TmUser>{
 	
 	@Autowired
 	EntityManager em;
@@ -28,11 +30,6 @@ public class TmUserDao {
 	public TmUser findByUserName(String userName) {
 		String query = "select * from tm_user where user_name = '" + userName + "'";
 		return (TmUser)em.createNativeQuery(query, TmUser.class).getSingleResult();
-	}
-	
-	
-	public void saveOrUpdate(TmUser user) {
-		em.merge(user);
 	}
 
 }

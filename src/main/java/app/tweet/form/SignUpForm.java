@@ -1,6 +1,6 @@
 package app.tweet.form;
 
-import app.tweet.dto.SignUpDTO;
+import app.tweet.dto.SignUpDto;
 
 /**
  * ユーザ登録画面の入力情報を格納するためのフォーム
@@ -12,7 +12,7 @@ public class SignUpForm {
 	/**
 	 * ユーザ情報を格納したDTO
 	 */
-	private SignUpDTO dto;
+	private SignUpDto dto;
 	
 	/**
 	 * 確認用パスワードを保持するために利用
@@ -22,14 +22,14 @@ public class SignUpForm {
 	/**ユーザ情報を格納したDTOを取得する。
 	 * @return the dto
 	 */
-	public SignUpDTO getDto() {
+	public SignUpDto getDto() {
 		return dto;
 	}
 
 	/**ユーザ情報を格納したDTOをセットする。
 	 * @param dto the dto to set
 	 */
-	public void setDto(SignUpDTO dto) {
+	public void setDto(SignUpDto dto) {
 		this.dto = dto;
 	}
 

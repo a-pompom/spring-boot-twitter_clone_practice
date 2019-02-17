@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import app.tweet.dto.SignUpDTO;
+import app.tweet.dto.SignUpDto;
 import app.tweet.entity.TmUser;
 import app.tweet.form.SignUpForm;
 import app.tweet.service.SignUpService;
@@ -52,7 +52,7 @@ public class SignUpController {
 	private String init (SignUpForm form, Model model) {
 		
 		//フォームの入力情報を格納するためのDTO・ユーザエンティティを生成
-		SignUpDTO dto = new SignUpDTO();
+		SignUpDto dto = new SignUpDto();
 		dto.setUser(new TmUser());
 		
 		//フォームへDTOをセット
