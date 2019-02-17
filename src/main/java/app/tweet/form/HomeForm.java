@@ -1,5 +1,7 @@
 package app.tweet.form;
 
+import java.util.List;
+
 import app.tweet.dto.HomeDto;
 
 /**
@@ -14,7 +16,10 @@ public class HomeForm {
 	 */
 	private HomeDto dto;
 	
-	//TODO ホーム画面の投稿一覧として表示するためDTOのリストをフィールドへ追加
+	/**
+	 * タイムラインとして表示する投稿DTOのリスト
+	 */
+	private List<HomeDto> dtoList;
 
 	/**
 	 * @return the dto
@@ -29,6 +34,22 @@ public class HomeForm {
 	public void setDto(HomeDto dto) {
 		this.dto = dto;
 	}
+
+	/**
+	 * @return the dtoList
+	 */
+	public List<HomeDto> getDtoList() {
+		return dtoList;
+	}
+
+	/**
+	 * @param dtoList the dtoList to set
+	 */
+	public void setDtoList(List<HomeDto> dtoList) {
+		this.dtoList = dtoList;
+	}
+	
+	
 	
 	
 	

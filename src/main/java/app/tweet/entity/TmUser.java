@@ -1,13 +1,13 @@
 package app.tweet.entity;
-// Generated 2019/02/11 17:54:56 by Hibernate Tools 4.3.5.Final
+// Generated 2019/02/17 14:30:56 by Hibernate Tools 4.3.5.Final
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -135,6 +135,20 @@ public class TmUser implements java.io.Serializable {
 
 	public void setDeleteFlg(Boolean deleteFlg) {
 		this.deleteFlg = deleteFlg;
+	}
+	
+	/**
+	 * 永続化前に呼ばれるメソッド
+	 * デフォルト値を設定する
+	 */
+	@PrePersist
+	public void prePersist()
+	{
+		//削除フラグが未設定の場合falseをセット
+	    if ( getDeleteFlg() == null )
+	    {
+	        setDeleteFlg(false);
+	    }
 	}
 
 }

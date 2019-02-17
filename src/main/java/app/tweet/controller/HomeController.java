@@ -1,12 +1,18 @@
 package app.tweet.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import app.tweet.dto.HomeDto;
 import app.tweet.form.HomeForm;
+import app.tweet.security.CustomUser;
 import app.tweet.service.HomeService;
 
 /**
@@ -24,8 +30,14 @@ public class HomeController {
 	@RequestMapping("/init")
 	private String init(HomeForm form) {
 		
+		//セッション上のユーザID情報を取得
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUser user = (CustomUser)auth.getPrincipal();
+		
 		//フォームに入力値が残っている場合があるので、初期化
 		form.setDto(new HomeDto());
+		List<HomeDto> dtoList = homeService.findTheUserPostList(user.getUserId());
+		form.setDtoList(dtoList);
 		
 		return "home";
 	}
@@ -38,7 +50,7 @@ public class HomeController {
 	private String save(HomeForm form) {
 		homeService.save(form.getDto());
 		
-		return init(form);
+		return "redirect:/home/init";
 	}
 	
 	/**

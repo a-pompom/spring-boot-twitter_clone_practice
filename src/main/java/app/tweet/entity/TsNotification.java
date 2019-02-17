@@ -1,8 +1,7 @@
 package app.tweet.entity;
-// Generated 2019/02/11 17:54:56 by Hibernate Tools 4.3.5.Final
+// Generated 2019/02/17 14:30:56 by Hibernate Tools 4.3.5.Final
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

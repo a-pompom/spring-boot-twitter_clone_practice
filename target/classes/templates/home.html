@@ -45,16 +45,16 @@
             </form>
 
             <!-- 投稿 -->
-            <div class="post">
+            <div class="post" th:each="dto, i : ${homeForm.dtoList}" th:object="${homeForm}">
                 <!-- 投稿ユーザ情報 -->
                 <ul class="post-user">
                     <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
+                    <li th:text="${dto.userNickName}" class="post-user__content">ユーザ名</li>
+                    <li th:text="${dto.userName}" class="post-user__content">ユーザID</li>
                     <li class="post-user__content">タイムスタンプ</li>
                 </ul>
                 <!-- 本文 -->
-                <p>
+                <p th:text="${dto.post.post}">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
                 </p>
                 <!-- メンション -->
@@ -65,96 +65,11 @@
                 </ul>
             </div>
 
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
+            
+           
             
             
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
             
-            
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
-            
-            
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-              <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
 
         </div>
     </body>
