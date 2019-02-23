@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <link rel="stylesheet" href="../css/normalize.css">
         <link rel="stylesheet" href="../css/style.css">
@@ -8,189 +8,101 @@
         <title>ユーザ</title>
     </head>
     <body>
-        <header class="header">
-            <ul class="header__nav">
-                <li><a href="#" class="link--header">
-                    <i class="fas fa-home"></i>ホーム</a></li>
-                <li><a href="notification.html" class="link--header">
-                    <i class="fas fa-bell"></i>通知</a></li>
-                <li><a href="#" class="link--header">
-                    <i class="fas fa-envelope"></i>メッセージ</a></li>
-                <li>
-                    <form class="header--nav-search">
-                    <input type="text">
-                    <a href="search.html" class="link--header"><i class="fas fa-search"></i>検索</a>
-                </form>
-                </li>
-                
-            </ul>
-            <div class="header__sub">
-                <a href="user.html" class="link--header"><i class="fas fa-smile"></i></a>
-                <a href="login.html" class="button--exit">ログアウト</a>
-            </div>
-        </header>
-
-        <div class="user">
- 
-            <ul class="user__headline">
-                <li class="user-icon">
-                    <a href="user.html"><i class="fas fa-smile"></i></a>
-                </li>
-
-                <!-- ユーザ情報 -->
-                <li class="user-info">
-
-                    <ul class="user-info__content">
-                        <a href="user.html"><li class="user-info__content__sub">投稿</li></a>
-                        <a href="user.html"><li class="user-info__content__main">19</li></a>
-                    </ul>
-                    <ul class="user-info__content">
-                        <a href="following.html"><li class="user-info__content__sub">フォロー</li></a>
-                        <a href="following.html"><li class="user-info__content__main">13</li></a>
-                    </ul>
-                    <ul class="user-info__content">
-                        <a href="follower.html"><li class="user-info__content__sub">フォロワー</li></a>
-                        <a href="follower.html"><li class="user-info__content__main">14</li></a>
-                    </ul>
-                    <ul class="user-info__content">
-                        <a href="favorite.html"><li class="user-info__content__sub">お気に入り</li></a>
-                        <a href="favorite.html"><li class="user-info__content__main">5</li></a>
-                    </ul>
-                </li>
-                
-                <li class="user-button">
-                <a href="#" class="button--edit">プロフィールを編集</a>
-                </li>
-
-            </ul>
- 
-            <!-- ユーザ基本情報 -->
-            <div class="user__about">
-                <ul class="user__about__text">
-                    <li>ユーザ名</li>
-                    <li>ユーザID</li>
-                    <li>Vivamus vitae faucibus augue. In mauris massa, blandit quis turpis at, sodales lacinia velit. Sed purus lorem, tristique non pulvinar vel, laoreet in odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </li>
-                    <li>登録日: 2019年1月</li>
-                    <li>誕生日: 2000年1月1日</li>
-                </ul> 
-            </div>
-            
-            <p class="user__head-text">投稿</p>
-
-
-            <!-- 投稿 -->
-            <div class="post">
-                <!-- 投稿ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>
-                </ul>
-            </div>
-
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
-            
-            
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
-            
-            
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
-            
-            
-            <!-- 投稿 --> 
-            <div class="post">
-                <!-- ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-user__content">ユーザ名</li>
-                    <li class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-              <!-- 本文 -->
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-              
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>  
-                </ul>
-            </div>
-    </div>
+    	<form th:object="${userForm}">
+    	
+	        <header class="header">
+	            <ul class="header__nav">
+	                <li><a href="#" class="link--header">
+	                    <i class="fas fa-home"></i>ホーム</a></li>
+	                <li><a href="notification.html" class="link--header">
+	                    <i class="fas fa-bell"></i>通知</a></li>
+	                <li><a href="#" class="link--header">
+	                    <i class="fas fa-envelope"></i>メッセージ</a></li>
+	                <li>
+	                    <input type="text">
+	                    <a href="search.html" class="link--header"><i class="fas fa-search"></i>検索</a>
+	                </li>
+	                
+	            </ul>
+	            <div class="header__sub">
+	                <a href="user.html" class="link--header"><i class="fas fa-smile"></i></a>
+	                <a href="logout.html" class="button--exit">ログアウト</a>
+	            </div>
+	        </header>
+	
+	        <div class="user">
+	 
+	            <ul class="user__headline">
+	                <li class="user-icon">
+	                    <a href="user.html"><i class="fas fa-smile"></i></a>
+	                </li>
+	
+	                <!-- ユーザ情報 -->
+	                <li class="user-info">
+	                    <ul class="user-info__content">
+	                        <li class="user-info__content__sub"><a href="#">投稿</a></li>
+	                        <li th:text="*{dto.postNum}" class="user-info__content__main"><a href="#">19</a></li>
+	                    </ul>
+	                    <ul class="user-info__content">
+	                        <li class="user-info__content__sub">フォロー<a href="following.html"></a></li>
+	                        <li class="user-info__content__main"><a href="following.html">13</a></li>
+	                    </ul>
+	                    <ul class="user-info__content">
+	                        <li class="user-info__content__sub"><a href="follower.html">フォロワー</a></li>
+	                        <li class="user-info__content__main"><a href="follower.html">14</a></li>
+	                    </ul>
+	                    <ul class="user-info__content">
+	                        <li class="user-info__content__sub"><a href="favorite.html">お気に入り</a></li>
+	                        <li class="user-info__content__main"><a href="favorite.html">5</a></li>
+	                    </ul>
+	                </li>
+	                
+	                <li class="user-button">
+	                <a href="#" class="button--edit">プロフィールを編集</a>
+	                </li>
+	
+	            </ul>
+	 
+	            <!-- ユーザ基本情報 -->
+	            <div class="user__about">
+	                <ul class="user__about__text">
+	                    <li th:text="*{dto.user.userNickname}">ユーザ名</li>
+	                    <li th:text="*{dto.user.userName}">ユーザID</li>
+	                    <li>Vivamus vitae faucibus augue. In mauris massa, blandit quis turpis at, sodales lacinia velit. Sed purus lorem, tristique non pulvinar vel, laoreet in odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	                    </li>
+	                    <li th:text="*{dto.user.createTs}">登録日: 2019年1月</li>
+	                    <li th:text="*{dto.user.birthDate}">誕生日: 2000年1月1日</li>
+	                </ul> 
+	            </div>
+	            
+	            <p class="user__head-text">投稿</p>
+	
+	
+	            <!-- 投稿 -->
+	            <div class="post" th:each="post : *{dto.userPostExtList}">
+	                <!-- 投稿ユーザ情報 -->
+	                <ul class="post-user">
+	                    <li class="post-user__content"><a href="#" class="content"><i class="fas fa-smile"></i></a></li>
+	                    <li class="post-user__content" th:text="${post.userNickname}">ユーザ名</li>
+	                    <li class="post-user__content" th:text="${post.userName}">ユーザID</li>
+	                    <li class="post-user__content">タイムスタンプ</li>
+	                </ul>
+	                <!-- 本文 -->
+	                <p th:text="${post.post}">
+	                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
+	                </p>
+	                <!-- メンション -->
+	                <ul class="post-mention">
+	                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
+	                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
+	                    <li class="post-mention__content"><i class="fas fa-star"></i></li>
+	                </ul>
+	            </div>
+	
+	           
+	    </div>
+    
+    </form>
 
 </body>
 </html>
