@@ -36,7 +36,7 @@ public class HomeController {
 		
 		//フォームに入力値が残っている場合があるので、初期化
 		form.setDto(new HomeDto());
-		List<HomeDto> dtoList = homeService.findTheUserPostList(user.getUserId());
+		List<HomeDto> dtoList = homeService.findTheUserAndFollowPostList(user.getUserId());
 		form.setDtoList(dtoList);
 		
 		return "home";

@@ -7,10 +7,11 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import app.tweet.base.BaseDao;
 import app.tweet.entity.TsFollow;
 
 @Component
-public class TsFollowDao {
+public class TsFollowDao extends BaseDao<TsFollow> {
 	
 	@Autowired
 	EntityManager em;

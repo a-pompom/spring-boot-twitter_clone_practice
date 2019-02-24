@@ -21,7 +21,17 @@ public class UserDto {
 	/**
 	 * 投稿数
 	 */
-	private Integer postNum;
+	private Integer postCount;
+	
+	/**
+	 * フォロー数
+	 */
+	private Integer followCount;
+	
+	/**
+	 * フォロワー数
+	 */
+	private Integer followerCount;
 	
 	/**
 	 * ユーザの投稿
@@ -44,17 +54,35 @@ public class UserDto {
 	}
 
 	/**
-	 * @return the postNum
+	 * @return the postCount
 	 */
-	public Integer getPostNum() {
-		return postNum;
+	public Integer getPostCount() {
+		return postCount;
 	}
 
 	/**
-	 * @param postNum the postNum to set
+	 * @param postCount the postCount to set
 	 */
-	public void setPostNum(Integer postNum) {
-		this.postNum = postNum;
+	public void setPostCount(Integer postCount) {
+		this.postCount = postCount;
+	}
+	
+	
+
+	public Integer getFollowCount() {
+		return followCount;
+	}
+
+	public void setFollowCount(Integer followCount) {
+		this.followCount = followCount;
+	}
+
+	public Integer getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(Integer followerCount) {
+		this.followerCount = followerCount;
 	}
 
 	/**

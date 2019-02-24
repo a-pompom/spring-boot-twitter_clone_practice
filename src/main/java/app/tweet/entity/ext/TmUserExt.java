@@ -28,6 +28,8 @@ public class TmUserExt {
 	
 	//ユーザ基本情報
 	private Integer postCount; //ユーザの投稿数
+	private Integer followCount; //ユーザのフォロー数
+	private Integer followerCount; //ユーザのフォロワー数
 
 	public TmUserExt() {
 		
@@ -102,6 +104,25 @@ public class TmUserExt {
 	public void setPostCount(Integer postCount) {
 		this.postCount = postCount;
 	}
+
+	@Column(name = "follow_count")
+	public Integer getFollowCount() {
+		return followCount;
+	}
+
+	public void setFollowCount(Integer followCount) {
+		this.followCount = followCount;
+	}
+
+	@Column(name = "follower_count")
+	public Integer getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(Integer followerCount) {
+		this.followerCount = followerCount;
+	}
+	
 	
 	
 }

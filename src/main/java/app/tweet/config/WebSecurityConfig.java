@@ -60,11 +60,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/sign-up/*").permitAll()
+				.antMatchers("/", "/sign-up/*", "/*").permitAll()
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()
-				.loginPage("/login")
 				.loginPage("/login") //ログインページはコントローラを経由しないのでViewNameとの紐付けが必要
 				.loginProcessingUrl("/sign_in") //フォームのSubmitURL、このURLへリクエストが送られると認証処理が実行される
 				.usernameParameter("userName")

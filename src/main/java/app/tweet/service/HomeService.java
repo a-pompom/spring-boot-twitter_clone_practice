@@ -54,14 +54,20 @@ public class HomeService {
 	}
 	
 	/**
-	 * ログインユーザの投稿・投稿者情報をDBから取得し、DTOへ格納する。
-	 * @return ログインユーザの投稿・投稿者情報を格納したDTOのリスト
+	 * ログインユーザの投稿・投稿者情報+ログインユーザがフォローしているユーザの投稿情報を取得し、DTOへ格納する。
+	 * @param userId ログインユーザのユーザID
+	 * @return ホーム画面へ表示する投稿情報を格納したDTOのリスト
 	 */
-	public List<HomeDto> findTheUserPostList(int userId){
-		List<TmPostExt> postList = tmPostDao.findTheUserExtPostList(userId);
+	public List<HomeDto> findTheUserAndFollowPostList(int userId) {
+		List<TmPostExt> postList = tmPostDao.findTheUserAndFollowExtPostList(userId);
 		return convertToDto(postList);
 	}
 	
+	/**
+	 * DBから取得した拡張エンティティから各種Dtoへ分割する。
+	 * @param postList DBから取得した拡張投稿エンティティのリスト
+	 * @return ホーム画面へ表示する投稿情報を格納したDtoのリスト
+	 */
 	private List<HomeDto> convertToDto(List<TmPostExt> postList){
 		List<HomeDto> dtoList = new ArrayList<HomeDto>();
 		for (TmPostExt postExt : postList) {

@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import app.tweet.base.BaseObject;
 import app.tweet.dao.TmUserDao;
 import app.tweet.entity.TmUser;
 import app.tweet.security.CustomUser;
@@ -48,6 +48,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		CustomUser customUser = new CustomUser(user.getUserName(), encoder.encode(user.getPassword()), grantList);
 		//セッションで管理するためDBの主キーとなるユーザIDを認証用ユーザオブジェクトへセット
 		customUser.setUserId(user.getUserId());
+		customUser.setReferUserName("");
+		customUser.setReferUser(new TmUser());
+		customUser.getReferUser().setUserId(16);
 		
 		//UserDetailsはインタフェースなので、Userクラスのコンストラクタで生成したユーザオブジェクトをキャスト
 		UserDetails userDetails = (UserDetails)customUser;
