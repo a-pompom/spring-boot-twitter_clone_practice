@@ -169,6 +169,14 @@ button, input[type=submit] {
   font-size: 5rem;
 }
 
+.share__color {
+  color: aquamarine;
+}
+
+.favorite__color {
+  color: blanchedalmond;
+}
+
 /*------------------------------*/
 /*HEADER                        */
 /*------------------------------*/

@@ -1,8 +1,7 @@
 package app.tweet.form;
 
-import java.util.List;
-
-import app.tweet.dto.HomeDto;
+import app.tweet.dto.PostDto;
+import app.tweet.entity.TmPost;
 
 /**
  * ホーム画面へ表示する情報を格納したフォーム
@@ -12,44 +11,83 @@ import app.tweet.dto.HomeDto;
 public class HomeForm {
 	
 	/**
-	 * 投稿・投稿者情報を格納したDTO
+	 *ログインユーザの入力した投稿を格納するためのEntity 
 	 */
-	private HomeDto dto;
+	private TmPost post;
 	
 	/**
-	 * タイムラインとして表示する投稿DTOのリスト
+	 * 投稿一覧情報を管理するDto
 	 */
-	private List<HomeDto> dtoList;
-
-	/**
-	 * @return the dto
-	 */
-	public HomeDto getDto() {
-		return dto;
-	}
-
-	/**
-	 * @param dto the dto to set
-	 */
-	public void setDto(HomeDto dto) {
-		this.dto = dto;
-	}
-
-	/**
-	 * @return the dtoList
-	 */
-	public List<HomeDto> getDtoList() {
-		return dtoList;
-	}
-
-	/**
-	 * @param dtoList the dtoList to set
-	 */
-	public void setDtoList(List<HomeDto> dtoList) {
-		this.dtoList = dtoList;
-	}
+	private PostDto postDto;
 	
+	/**
+	 * ログインユーザ名
+	 */
+	private String userName;
 	
+	/**
+	 * 検索文字列
+	 */
+	private String searchQuery;
+
+	/**
+	 * @return the post
+	 */
+	public TmPost getPost() {
+		return post;
+	}
+
+	/**
+	 * @param post the post to set
+	 */
+	public void setPost(TmPost post) {
+		this.post = post;
+	}
+
+	
+
+	/**
+	 * @return the postDto
+	 */
+	public PostDto getPostDto() {
+		return postDto;
+	}
+
+	/**
+	 * @param postDto the postDto to set
+	 */
+	public void setPostDto(PostDto postDto) {
+		this.postDto = postDto;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the searchQuery
+	 */
+	public String getSearchQuery() {
+		return searchQuery;
+	}
+
+	/**
+	 * @param searchQuery the searchQuery to set
+	 */
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
+
 	
 	
 	

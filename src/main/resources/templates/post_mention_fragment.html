@@ -1,0 +1,28 @@
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head></head>
+	<body>
+		<!--/* メンション */-->
+		<!--/* 画面ごとの遷移先、ログインユーザのメンションフラグによって生成されるHTMLを切り替え */-->
+		<ul>
+			<li th:fragment="mention" class="post-mention__content">
+				<th:block th:if="${controller} == 'home'">
+					<a th:href="@{/home/__${mentionType}__/__${post.postId}__}">
+					<!--/* ログインユーザがメンションを行うとアイコンに色が付与される */-->
+					<i th:class="'fas' + ' ' +  ('fa-' + __${mentionIcon}__)" 
+						th:classappend="(${isLoginMentioned}? (${mentionType} + '__color') : '')"></i></a>
+				</th:block>
+				<th:block th:if="${controller} == 'user'">
+					<a th:href="@{/user/__${mentionType}__/__${post.postId}__/__*{method}__}">
+					<i th:class="'fas' + ' ' +  ('fa-' + __${mentionIcon}__)" 
+						th:classappend="(${isLoginMentioned}? (${mentionType} + '__color') : '')"></i></a>
+				</th:block>
+				<th:block th:if="${controller} == 'search'">
+					<a th:href="@{/search/__${mentionType}__/__${post.postId}__}">
+					<i th:class="'fas' + ' ' +  ('fa-' + __${mentionIcon}__)" 
+						th:classappend="(${isLoginMentioned}? (${mentionType} + '__color') : '')"></i></a>
+				</th:block>							
+			</li>
+		</ul>
+		
+	</body>
+</html>

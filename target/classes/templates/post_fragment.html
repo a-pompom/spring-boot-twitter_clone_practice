@@ -1,0 +1,34 @@
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head></head>
+	<body>
+		<!--/* 投稿一覧 */-->
+			<div th:fragment="post">
+				<div class="post" th:each="post, i : *{postDto.postList}">
+				<!--/* ユーザ */-->
+				<ul class="post-user">
+					<li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
+					<li th:text="${post.userNickname}" class="post-user__content">ユーザ名</li>
+					<li th:text="${post.userName}" class="post-user__content">ユーザID</li>
+					<li class="post-user__content">タイムスタンプ</li>
+				</ul>
+				<!--/* 本文 */-->
+				<p th:text="${post.post}">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
+				</p>
+				<!--/* メンション */-->
+				<ul class="post-mention">
+					<li class="post-mention__content"><i class="fas fa-reply"></i></li>
+					<!--/* mentionType: share,favoriteといったメンションの内容 mentionIcon: メンションのアイコンクラス 
+							isLoginMentioned ログインユーザがメンションを行ったか否かを管理するフラグ */-->
+					<li th:replace="post_mention_fragment :: 
+									mention(controller = __${controller}__, mentionType = 'share', mentionIcon = 'sync',
+									 isLoginMentioned = __${post.loginUserShareFlg}__)"></li>
+					<li th:replace="post_mention_fragment :: 
+									mention(controller = __${controller}__, mentionType = 'favorite', mentionIcon = 'star',
+									 isLoginMentioned = __${post.loginUserFavFlg}__)"></li>
+				</ul>
+			</div> 
+			</div>
+			
+	</body>
+</html>

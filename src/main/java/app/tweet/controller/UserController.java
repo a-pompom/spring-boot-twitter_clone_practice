@@ -11,14 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import app.tweet.base.BaseController;
 import app.tweet.base.TweetConst.UserViewMethod;
-import app.tweet.dto.FollowDto;
 import app.tweet.entity.TmUser;
 import app.tweet.form.UserForm;
 import app.tweet.security.CustomUser;
+import app.tweet.service.MentionService;
 import app.tweet.service.UserService;
 
 /**
@@ -37,18 +39,21 @@ public class UserController extends BaseController{
 	UserService userService;
 	
 	/**
-	 * 初期処理 ユーザの投稿、ユーザ情報、ユーザ基本情報を取得し、フォームへセットする。
-	 * @param
-	 * @return
+	 * メンションサービス
 	 */
-	@RequestMapping(value = "/user/init")
-	private String init(UserForm form, @AuthenticationPrincipal CustomUser user) {
-		form.setDto(userService.getUserProfile(user.getUserId()));
-		form.setLoggedInUser(true);
-		return "user";
-	}
+	@Autowired
+	MentionService mentionService;
 	
-	@RequestMapping(value = "/{regUserName:(?!^.$)|^[a-z0-9_]+$}/{regMethod:(?!^.$)|^[a-z]+$}")
+	/**
+	 * 「ユーザ名/メソッド名」で遷移したときに呼ばれるメソッド
+	 * 「.css」など静的リソースも拾ってしまうので、正規表現で除外
+	 * @param request URI
+	 * @param form ユーザフォーム
+	 * @param model セッションへ参照中のユーザを格納するためのモデル
+	 * @param customUser ログイン中のユーザ情報
+	 * @return ユーザ画面
+	 */
+	@RequestMapping(value = "/{regUserName:(?!^.$)|^[a-z0-9_]+$}/{regMethod:(?!^[.]+$)|^[a-z]+$}", method = RequestMethod.GET)
 	private String initUserWithMethod(HttpServletRequest request, UserForm form, Model model,
 			@AuthenticationPrincipal CustomUser customUser) {
 		return initUser(request, form, model, customUser);
@@ -61,7 +66,7 @@ public class UserController extends BaseController{
 	 * @param form ユーザフォーム
 	 * @return ユーザ画面
 	 */
-	@RequestMapping(value = "/{reg:(?!^.$)|^[a-z0-9_]+$}")
+	@RequestMapping(value = "/{reg:(?!^[.]+$)|^[a-z0-9_]+$}", method = RequestMethod.GET)
 	private String initUser(HttpServletRequest request, UserForm form, Model model,
 							@AuthenticationPrincipal CustomUser customUser) {
 		//TODO ユーザ名のサニタイズメソッドの実装
@@ -84,7 +89,7 @@ public class UserController extends BaseController{
 		
 		//参照中のユーザ情報をセッションへ格納
 		model.addAttribute("referUser", user);
-		
+		form.setUserName(customUser.getUsername());
 		//フォームへユーザ情報・ユーザ投稿情報をセット
 		form.setLoggedInUser(customUser.getUserId() == user.getUserId() ? true : false);
 		form.setDto(userService.getUserProfile(user.getUserId()));
@@ -101,7 +106,7 @@ public class UserController extends BaseController{
 	private String setViewInfoByMethodURI(UserForm form, String[] userNameAndMethod, int referUserId, int loginUserId){
 		//userNameAndMethodのMethod部分が存在しない場合、投稿情報
 		if (userNameAndMethod.length < 3) {
-			
+			form.setPostDto(userService.getUserPost(referUserId));
 			form.setMethod("post");
 			return "user";
 		}
@@ -110,19 +115,23 @@ public class UserController extends BaseController{
 		UserViewMethod v;
 		v = UserViewMethod.valueOf(method);
 		switch (v) {
+		case POST:
+			form.setPostDto(userService.getUserPost(referUserId));
+			form.setMethod("post");
+			return "user";
 		case FAVORITE:
+			form.setPostDto(userService.getFavoritePost(referUserId, loginUserId));
+			form.setMethod("favorite");
 			return "user";
 		case FOLLOWING:
 			form.setDto(userService.getUserProfile(referUserId));
 			//フォロー情報取得処理
-			form.setFollowDto(new FollowDto());
-			form.getFollowDto().setFollowList(userService.findFollowUserList(referUserId, loginUserId));
+			form.setFollowDto(userService.getUserFollowing(referUserId, loginUserId));
 			form.setMethod("following");
 			return "user";
 		case FOLLOWER:
-			//フォロー情報取得処理
-			form.setFollowDto(new FollowDto());
-			form.getFollowDto().setFollowList(userService.findFollowerUserList(referUserId, loginUserId));
+			//フォロワーー情報取得処理
+			form.setFollowDto(userService.getUserFollower(referUserId, loginUserId));
 			form.setMethod("follower");
 			return "user";
 		default:
@@ -131,16 +140,90 @@ public class UserController extends BaseController{
 	}
 	
 	/**
-	 * 参照中のユーザをフォローする。
+	 *  フォームの入力値でユーザ情報を編集する
 	 * @param form ユーザフォーム
+	 * @param user ログインユーザ
+	 * @param method 参照中の画面
+	 * @return 参照中の画面
+	 */
+	@RequestMapping(value = "/user/editUser/{method}", method = RequestMethod.POST)
+	private String editUser(UserForm form, @AuthenticationPrincipal CustomUser user, 
+			@PathVariable("method")String method) {
+		userService.editUser(form.getDto());
+		
+		//参照中の画面へ戻る
+		return "redirect:/" + user.getUsername() + "/" + method;
+	}
+	
+	
+	/**
+	 * 参照中のユーザをフォローする。
+	 * @param user ログインユーザ
+	 * @param referUser 参照中の画面のユーザEntity
+	 * @param followUserId フォロー対象のユーザID
 	 * @return 参照中のユーザ画面
 	 */
-	@RequestMapping(value = "/*/do_follow")
-	private String doFollow(@AuthenticationPrincipal CustomUser user, @ModelAttribute("referUser")TmUser referUser) {
+	@RequestMapping(value = "/user/{followUserId}/do_follow/{method}")
+	private String doFollow(@AuthenticationPrincipal CustomUser user,
+			@ModelAttribute("referUser")TmUser referUser, 
+			@PathVariable("followUserId")int followUserId, @PathVariable("method")String method) {
+		if (method == null) {
+			userService.doFollow(user.getUserId(), referUser.getUserId());
+			return "redirect:/" + referUser.getUserName();
+		}
 		
-		userService.doFollow(user.getUserId(), referUser.getUserId());
-		return "redirect:/" + referUser.getUserName();
+		userService.doFollow(user.getUserId(), followUserId);
+		return "redirect:/" + referUser.getUserName() + "/" + method;
 	}
+	
+	/**
+	 * 選択された投稿を共有する。
+	 * @param customUser セッションに格納されているログインユーザ情報
+	 * @param postUserId 選択された投稿のID
+	 * @param referUser 参照中のユーザEntity
+	 * @param method どの画面から遷移してきたかを保持する
+	 * @return ユーザ画面
+	 */
+	@RequestMapping(value = "/user/share/{postId}/{method}")
+	private String share(@AuthenticationPrincipal CustomUser customUser,
+			@PathVariable("postId")int postId, @ModelAttribute("referUser")TmUser referUser,
+			@PathVariable("method")String method) {
+		mentionService.share(customUser.getUserId(), postId);
+		
+		return "redirect:/" + referUser.getUserName() + "/" + method;
+	}
+	
+	/**
+	 * 選択された投稿をお気に入りへ登録する。
+	 * @param customUser セッションに格納されているログインユーザ情報
+	 * @param postUserId 選択された投稿のID
+	 * @return
+	 */
+	@RequestMapping(value = "/user/favorite/{postId}")
+	private String favorite(@AuthenticationPrincipal CustomUser customUser,
+			@PathVariable("postId")int postId, @ModelAttribute("referUser")TmUser referUser) {
+		mentionService.favorite(customUser.getUserId(), postId);
+		
+		return "redirect:/" + referUser.getUserName() + "/" + "favorite";
+	}
+	
+	/**
+	 * 検索ボタン押下時に呼ばれる処理
+	 * 検索文字列をModelへ格納し、検索コントローラへリダイレクト
+	 * @param form ユーザ画面用のフォーム
+	 * @param attr リダイレクトパラメータを利用するためのModel
+	 * @return 検索画面の検索処理
+	 */
+	@RequestMapping(value = "/user/search", method = RequestMethod.POST)
+	private String search(UserForm form, RedirectAttributes attr) {
+		//TODO 検索クエリ文字列のサニタイズ化
+		String unsafeQueryString = form.getSearchQuery();
+		attr.addFlashAttribute("searchQueryString", unsafeQueryString);
+		return "redirect:/search/init";
+		
+	}
+	
+	
 	
 	/**
 	 * コントローラ内で共通のユーザフォームを生成。

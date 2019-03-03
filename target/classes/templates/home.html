@@ -1,70 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layout :: base_header('ホーム')"></head>
-    <body>
-        <header class="header">
-            <ul class="header__nav">
-                <li><a href="#" class="link--header">
-                    <i class="fas fa-home"></i>ホーム</a></li>
-                <li><a href="notification.html" class="link--header">
-                    <i class="fas fa-bell"></i>通知</a></li>
-                <li><a href="#" class="link--header">
-                    <i class="fas fa-envelope"></i>メッセージ</a></li>
-                <li>
-                    <form class="header--nav-search">
-                        <input type="text">
-                        <a href="search.html" class="link--header"><i class="fas fa-search"></i>検索</a>
-                    </form>
-                </li>
-            </ul>
-            <div class="header__sub">
-                <a th:href="@{/user/init}" class="link--header"><i class="fas fa-smile"></i></a>
-                <a href="login.html" class="button--exit">ログアウト</a>
-            </div>
-        </header>
+	<head th:replace="layout :: base_head('ホーム')"></head>
+	<body>
+		<form th:action="@{/home/save}" class="home__post-form" th:object="${homeForm}">
+			<header th:include="layout :: header(controller='home')" class="header"></header>
+			
+			<div class="home">
+			<!--/* 投稿欄 */-->
+				<ul class="post-form__main">
+					<li class="post-form__content"><a th:href="@{/__*{userName}__}" class="link--content"><i class="fas fa-smile"></i></a></li>
+					<li class="post-form__content">
+						<input type="text" th:field="*{post.post}" placeholder="いまどうしてる？" class="field--post"></li>
+				</ul> 
+				<div class="post-form__sub">
+					<input type="submit" th:formaction="@{/home/save}" value="投稿" class="button--save">
+				</div>
 
-        <div class="home">
-            <!-- 投稿欄 -->
-            <form th:action="@{/home/save}" class="home__post-form" th:object="${homeForm}">
-
-                <ul class="post-form__main">
-                    <li class="post-form__content"><a href="user.html" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li class="post-form__content">
-                        <input type="text" th:field="*{dto.post.post}" placeholder="いまどうしてる？" class="field--post"></li>
-                </ul> 
-                <div class="post-form__sub">
-                    <input type="submit" value="投稿" class="button--save">
-                </div>
-                
-            </form>
-
-            <!-- 投稿 -->
-            <div class="post" th:each="dto, i : ${homeForm.dtoList}" th:object="${homeForm}">
-                <!-- 投稿ユーザ情報 -->
-                <ul class="post-user">
-                    <li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
-                    <li th:text="${dto.userNickName}" class="post-user__content">ユーザ名</li>
-                    <li th:text="${dto.userName}" class="post-user__content">ユーザID</li>
-                    <li class="post-user__content">タイムスタンプ</li>
-                </ul>
-                <!-- 本文 -->
-                <p th:text="${dto.post.post}">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
-                </p>
-                <!-- メンション -->
-                <ul class="post-mention">
-                    <li class="post-mention__content"><i class="fas fa-reply"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-sync"></i></li>
-                    <li class="post-mention__content"><i class="fas fa-star"></i></li>
-                </ul>
-            </div>
-
-            
-           
-            
-            
-            
-
-        </div>
-    </body>
+			<div th:replace="post_fragment :: post(controller='home')"></div>
+			
+			</div>
+		</form>
+	</body>
 </html>

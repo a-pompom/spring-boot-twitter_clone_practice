@@ -19,6 +19,11 @@ public class UserDto {
 	private TmUser user;
 	
 	/**
+	 * ログイン中のユーザ名
+	 */
+	private String userName;
+	
+	/**
 	 * 投稿数
 	 */
 	private Integer postCount;
@@ -34,10 +39,9 @@ public class UserDto {
 	private Integer followerCount;
 	
 	/**
-	 * ユーザの投稿
+	 * お気に入り登録数
 	 */
-	private List<TmPostExt> userPostExtList;
-	
+	private Integer favoriteCount;
 	
 	/**
 	 * @return the user
@@ -51,6 +55,16 @@ public class UserDto {
 	 */
 	public void setUser(TmUser user) {
 		this.user = user;
+	}
+	
+	
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	/**
@@ -86,17 +100,17 @@ public class UserDto {
 	}
 
 	/**
-	 * @return the userPostList
+	 * @return the favoriteCount
 	 */
-	public List<TmPostExt> getUserPostExtList() {
-		return userPostExtList;
+	public Integer getFavoriteCount() {
+		return favoriteCount;
 	}
 
 	/**
-	 * @param userPostList the userPostList to set
+	 * @param favoriteCount the favoriteCount to set
 	 */
-	public void setUserPostExtList(List<TmPostExt> userPostExtList) {
-		this.userPostExtList = userPostExtList;
+	public void setFavoriteCount(Integer favoriteCount) {
+		this.favoriteCount = favoriteCount;
 	}
 	
 	

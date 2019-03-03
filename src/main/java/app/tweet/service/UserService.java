@@ -8,11 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmPostDao;
 import app.tweet.dao.TmUserDao;
+import app.tweet.dao.TsFavoriteDao;
 import app.tweet.dao.TsFollowDao;
+import app.tweet.dao.TsShareDao;
+import app.tweet.dto.FollowDto;
+import app.tweet.dto.PostDto;
 import app.tweet.dto.UserDto;
 import app.tweet.entity.TmUser;
+import app.tweet.entity.TsFavorite;
+import app.tweet.entity.TsFavoriteId;
 import app.tweet.entity.TsFollow;
 import app.tweet.entity.TsFollowId;
+import app.tweet.entity.TsShare;
+import app.tweet.entity.TsShareId;
 import app.tweet.entity.ext.TmPostExt;
 import app.tweet.entity.ext.TmUserExt;
 import app.tweet.entity.ext.TmUserFollowExt;
@@ -31,11 +39,29 @@ public class UserService {
 	@Autowired
 	private TmUserDao tmUserDao;
 	
+	/**
+	 * 投稿情報Dao
+	 */
 	@Autowired
 	private TmPostDao tmPostDao;
 	
+	/**
+	 * フォロー情報Dao
+	 */
 	@Autowired
 	private TsFollowDao tsFollowDao;
+	
+	/**
+	 * 共有情報Dao
+	 */
+	@Autowired
+	private TsShareDao tsShareDao;
+	
+	/**
+	 * お気に入り情報Dao
+	 */
+	@Autowired
+	private TsFavoriteDao tsFavoriteDao;
 	
 	//ユーザ投稿DTOを取得する処理
 	
@@ -48,24 +74,74 @@ public class UserService {
 		return tmUserDao.findByUserName(userName);
 	}
 	
+	/*			ユーザ関連のDto取得処理			*/
 	
-	//ユーザ情報を取得する処理
+	/**
+	 * ユーザのプロフィール情報を取得する
+	 * @param userId 参照中のユーザID
+	 * @return ユーザのプロフィール情報
+	 */
 	public UserDto getUserProfile(int userId) {
-		return convertToDto(tmUserDao.findUserProfile(userId), tmPostDao.findTheUserExtPostList(userId));
+		return convertToUserDto(tmUserDao.findUserProfile(userId));
 	}
 	
+	/**
+	 * ユーザの投稿情報を取得する
+	 * @param userId 参照中のユーザID
+	 * @return ユーザの投稿情報
+	 */
+	public PostDto getUserPost(int userId) {
+		return convertToPostDto(tmPostDao.findTheUserExtPostList(userId));
+	}
+	
+	/**
+	 * 参照中のユーザのお気に入り情報を取得する。
+	 * @param referUserId 参照中のユーザのユーザID
+	 * @param loginUserId ログイン中のユーザID
+	 * @return お気に入りの投稿情報のリスト　
+	 */
+	public PostDto getFavoritePost(int referUserId, int loginUserId) {
+		return convertToPostDto(tmPostDao.findFavoritePostList(referUserId, loginUserId));
+	}
+	
+	/**
+	 * ユーザのフォロー情報を取得する
+	 * @param referUserId 参照中のユーザID
+	 * @param loginUserId ログイン中のユーザID
+	 * @return フォローユーザ情報
+	 */
+	public FollowDto getUserFollowing(int referUserId, int loginUserId) {
+		return convertToFollowDto(tsFollowDao.findFollowUserList(referUserId, loginUserId));
+	}
+	
+	 /** ユーザのフォロー情報を取得する
+	 * @param referUserId 参照中のユーザID
+	 * @param loginUserId ログイン中のユーザID
+	 * @return フォローユーザ情報
+	 */
+	public FollowDto getUserFollower(int referUserId, int loginUserId) {
+		return convertToFollowDto(tsFollowDao.findFollowerUserList(referUserId, loginUserId));
+	}
+	
+	/*			ユーザ関連のDto取得処理ここまで			*/
+	
+	
+	/*			ユーザ関連のEntity→Dto整形処理			*/
 	/**
 	 * エンティティをDtoへ整形する。
 	 * @param user ユーザのプロフィール情報を格納したエンティティ
 	 * @param postList ユーザの投稿情報を格納したエンティティのリスト
 	 * @return ユーザ画面で利用する情報を格納したDto
 	 */
-	private UserDto convertToDto(TmUserExt userExt, List<TmPostExt> postList) {
+	private UserDto convertToUserDto(TmUserExt userExt) {
 		UserDto dto = new UserDto();
+		//ログインユーザ名→Dto
+		dto.setUserName(userExt.getUserName());
 		//ユーザプロフィール情報→Dto
 		dto.setPostCount(userExt.getPostCount());
 		dto.setFollowCount(userExt.getFollowCount());
 		dto.setFollowerCount(userExt.getFollowerCount());
+		dto.setFavoriteCount(userExt.getFavoriteCount());
 		//Extエンティティからユーザエンティティを生成
 		TmUser user = new TmUser();
 		user.setBio(userExt.getBio());
@@ -76,10 +152,33 @@ public class UserService {
 		user.setUserNickname(userExt.getUserNickname());
 		
 		dto.setUser(user);
-		//ユーザ投稿情報→Dto
-		dto.setUserPostExtList(postList);
 		return dto;
 	}
+	
+	/**
+	 * エンティティをDtoへ整形する。
+	 * @param postList ユーザの投稿情報を格納したエンティティのリスト
+	 * @return ユーザ画面で利用する情報を格納したDto
+	 */
+	private PostDto convertToPostDto(List<TmPostExt> postList) {
+		PostDto dto = new PostDto();
+		dto.setPostList(postList);
+		return dto;
+	}
+	
+	/**
+	 * エンティティをDtoへ整形する。
+	 * @param postList ユーザの投稿情報を格納したエンティティのリスト
+	 * @return ユーザ画面で利用する情報を格納したDto
+	 */
+	private FollowDto convertToFollowDto(List<TmUserFollowExt> followList) {
+		FollowDto dto = new FollowDto();
+		dto.setFollowList(followList);
+		return dto;
+	}
+	
+	/*			ユーザ関連のEntity→Dto整形処理ここまで			*/
+	
 	
 	/**
 	 * 参照中のユーザをフォローする。
@@ -98,23 +197,19 @@ public class UserService {
 	}
 	
 	/**
-	 * 参照中のユーザがフォローしているユーザの一覧を取得する。
-	 * @param referUserId 参照中のユーザID
-	 * @param loginUserId ログイン中のユーザのユーザID
-	 * @return フォローユーザのエンティティのリスト
+	 * フォームの入力値を格納したDtoからユーザEntityを生成し、DBへ格納
+	 * @param dto ユーザDto
 	 */
-	public List<TmUserFollowExt> findFollowUserList(int referUserId, int loginUserId) {
-		return tmUserDao.findFollowUserList(referUserId, loginUserId);
-	}
-	
-	/**
-	 * 参照中のユーザがフォローしているユーザの一覧を取得する。
-	 * @param referUserId 参照中のユーザID
-	 * @param loginUserId ログイン中のユーザのユーザID
-	 * @return フォローユーザのエンティティのリスト
-	 */
-	public List<TmUserFollowExt> findFollowerUserList(int referUserId, int loginUserId) {
-		return tmUserDao.findFollowerUserList(referUserId, loginUserId);
+	@Transactional
+	public void editUser(UserDto dto) {
+		//既存のユーザEntityをフォームの入力値を格納したDtoで更新
+		TmUser entity = tmUserDao.findByUserName(dto.getUser().getUserName());
+		//カラム値セット処理
+		entity.setUserName(dto.getUser().getUserName());
+		entity.setUserNickname(dto.getUser().getUserNickname());
+		entity.setBio(dto.getUser().getBio());
+		
+		tmUserDao.saveOrUpdate(entity);
 	}
 	
 	

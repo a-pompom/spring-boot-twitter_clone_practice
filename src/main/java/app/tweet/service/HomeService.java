@@ -1,19 +1,21 @@
 package app.tweet.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmPostDao;
-import app.tweet.dto.HomeDto;
+import app.tweet.dao.TsFavoriteDao;
+import app.tweet.dao.TsShareDao;
+import app.tweet.dto.PostDto;
 import app.tweet.entity.TmPost;
+import app.tweet.entity.TsFavorite;
+import app.tweet.entity.TsFavoriteId;
+import app.tweet.entity.TsShare;
+import app.tweet.entity.TsShareId;
 import app.tweet.entity.ext.TmPostExt;
-import app.tweet.security.CustomUser;
 
 /**
  * ホーム画面用のサービス
@@ -27,7 +29,43 @@ public class HomeService {
 	 * 投稿情報用のDao
 	 */
 	@Autowired
-	TmPostDao tmPostDao;
+	private TmPostDao tmPostDao;
+	
+	/**
+	 * 共有管理用のDao
+	 */
+	@Autowired
+	private TsShareDao tsShareDao;
+	
+	/**
+	 * お気に入り管理用のDao
+	 */
+	@Autowired
+	private TsFavoriteDao tsFavoriteDao;
+	
+	
+	/**
+	 * ログインユーザの投稿・投稿者情報+ログインユーザがフォローしているユーザの投稿情報を取得し、DTOへ格納する。
+	 * @param userId ログインユーザのユーザID
+	 * @return ホーム画面へ表示する投稿情報を格納したDTOのリスト
+	 */
+	public PostDto findTheUserAndFollowPostList(int userId) {
+		List<TmPostExt> postList = tmPostDao.findTheUserAndFollowExtPostList(userId);
+		return convertToDto(postList);
+	}
+	
+	/**
+	 * DBから取得した拡張エンティティをDtoへセットする。
+	 * @param postList DBから取得した拡張投稿エンティティのリスト
+	 * @return ホーム画面へ表示する投稿一覧を格納したDto
+	 */
+	private PostDto convertToDto(List<TmPostExt> postList){
+		PostDto dto = new PostDto();
+		dto.setPostList(postList);
+		
+		return dto;
+	}
+	
 	
 	/**
 	 * フォームへ入力された投稿情報を格納したDTOを利用してDBへ登録。
@@ -35,59 +73,9 @@ public class HomeService {
 	 * @param dto 投稿情報を格納したDTO
 	 */
 	@Transactional
-	public void save(HomeDto dto) {
-		setUserID(dto);
-		tmPostDao.saveOrUpdate(dto.getPost());
-	}
-	
-	/**
-	 * セッションを利用して投稿情報と投稿者情報を結びつける
-	 * @param dto 投稿情報を格納したDTO
-	 */
-	private void setUserID(HomeDto dto) {
-		//セッション上のユーザID情報を取得
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		CustomUser user = (CustomUser)auth.getPrincipal();
-		
-		//投稿情報に投稿者情報を紐付け
-		dto.getPost().setPostUserId(user.getUserId());
-	}
-	
-	/**
-	 * ログインユーザの投稿・投稿者情報+ログインユーザがフォローしているユーザの投稿情報を取得し、DTOへ格納する。
-	 * @param userId ログインユーザのユーザID
-	 * @return ホーム画面へ表示する投稿情報を格納したDTOのリスト
-	 */
-	public List<HomeDto> findTheUserAndFollowPostList(int userId) {
-		List<TmPostExt> postList = tmPostDao.findTheUserAndFollowExtPostList(userId);
-		return convertToDto(postList);
-	}
-	
-	/**
-	 * DBから取得した拡張エンティティから各種Dtoへ分割する。
-	 * @param postList DBから取得した拡張投稿エンティティのリスト
-	 * @return ホーム画面へ表示する投稿情報を格納したDtoのリスト
-	 */
-	private List<HomeDto> convertToDto(List<TmPostExt> postList){
-		List<HomeDto> dtoList = new ArrayList<HomeDto>();
-		for (TmPostExt postExt : postList) {
-			HomeDto dto = new HomeDto();
-			//投稿情報
-			dto.setPost(new TmPost());
-			dto.getPost().setPostId(postExt.getPostId());
-			dto.getPost().setPost(postExt.getPost());
-			dto.getPost().setPostUserId(postExt.getPostUserId());
-			dto.getPost().setPostTs(postExt.getPostTs());
-			dto.getPost().setDeleteFlg(postExt.getDeleteFlg());
-			
-			//ユーザ情報
-			dto.setUserName(postExt.getUserName());
-			dto.setUserNickName(postExt.getUserNickname());
-			
-			dtoList.add(dto);
-		}
-		
-		return dtoList;
+	public void save(TmPost post, int loginUserId) {
+		post.setPostUserId(loginUserId);
+		tmPostDao.saveOrUpdate(post);
 	}
 
 }

@@ -29,11 +29,40 @@ public class TmPostDao extends BaseDao<TmPost>{
 	 */
 	public List<TmPostExt> findTheUserExtPostList(int userId){
 		String query = "";
-		query += "select p.*, u.user_name, u.user_nickname";
+		query += "select p.*,";
+		query += " case";
+		query += " when fa.favorite_post_id is null then false";
+		query += " else true";
+		query += " end as login_fav_flg,";
+		query += " case";
+		query += " when sh.share_post_id is null then false";
+		query += " else true";
+		query += " end as login_share_flg";
+		query += " from (";
+		//ユーザの投稿＋ユーザの共有した投稿を取得
+		query += " select p.*, u.user_name, u.user_nickname";
 		query += " from tm_post p";
+		//投稿者情報
 		query += " inner join tm_user u";
 		query += " on p.post_user_id = u.user_id";
 		query += " and u.user_id = " + userId;
+		query += " union";
+		query += " select sp.*, su.user_name, su.user_nickname";
+		query += " from tm_post sp";
+		query += " inner join ts_share sh";
+		query += " on sh.share_user_id = " + userId;
+		query += " and sp.post_id = sh.share_post_id";
+		query += " inner join tm_user su";
+		query += " on sp.post_user_id = su.user_id";
+		query += " ) as p";
+		//各々の投稿について、ログインユーザがお気に入りに登録しているか否かを管理するフラグを取得
+		query += " left join ts_favorite fa";
+		query += " on fa.favorite_user_id =" + userId;
+		query += " and p.post_id = fa.favorite_post_id";
+		//ログインユーザが共有しているか否かを管理するフラグを取得
+		query += " left join ts_share sh";
+		query += " on sh.share_user_id =" + userId;
+		query += " and p.post_id = sh.share_post_id";
 		query += " order by p.post_ts desc";
 		
 		return (List<TmPostExt>) em.createNativeQuery(query, TmPostExt.class).getResultList();
@@ -47,7 +76,18 @@ public class TmPostDao extends BaseDao<TmPost>{
 	 */
 	public List<TmPostExt> findTheUserAndFollowExtPostList(int userId) {
 		String query = "";
-		query += "select p.*, u.user_name, u.user_nickname";
+		query += "select p.*,";
+		query += " case";
+		query += " when fa.favorite_post_id is null then false";
+		query += " else true";
+		query += " end as login_fav_flg,";
+		query += " case";
+		query += " when sh.share_post_id is null then false";
+		query += " else true";
+		query += " end as login_share_flg";
+		query += " from (";
+		//ユーザの投稿＋ユーザの共有した投稿を取得
+		query += " select p.*, u.user_name, u.user_nickname";
 		query += " from tm_post p";
 		//指定のユーザIDがフォローしているユーザのID+自分自身のユーザID
 		query += " inner join(";
@@ -66,7 +106,102 @@ public class TmPostDao extends BaseDao<TmPost>{
 		//各々の投稿について投稿者情報を取得
 		query += " inner join tm_user u";
 		query += " on p.post_user_id = u.user_id";
+		//共有情報をUNIONで縦結合
+		query += " union";
+		query += " select sp.*, su.user_name, su.user_nickname";
+		query += " from tm_post sp";
+		query += " inner join ts_share sh";
+		query += " on sh.share_user_id = " + userId;
+		query += " and sp.post_id = sh.share_post_id";
+		query += " inner join tm_user su";
+		query += " on sp.post_user_id = su.user_id";
+		query += " ) as p";
+		//各々の投稿について、ログインユーザがお気に入りに登録しているか否かを管理するフラグを取得
+		query += " left join ts_favorite fa";
+		query += " on fa.favorite_user_id =" + userId;
+		query += " and p.post_id = fa.favorite_post_id";
+		//ログインユーザが共有しているか否かを管理するフラグを取得
+		query += " left join ts_share sh";
+		query += " on sh.share_user_id =" + userId;
+		query += " and p.post_id = sh.share_post_id";
 		query += " order by p.post_ts desc";
+		return (List<TmPostExt>) em.createNativeQuery(query, TmPostExt.class).getResultList();
+	}
+	
+	/**
+	 * 参照中のユーザがお気に入りに登録している投稿を取得する。
+	 * @param referUserId 参照中のユーザID
+	 * @param loginUserId ログインユーザID
+	 * @return お気に入りの投稿リスト
+	 */
+	public List<TmPostExt> findFavoritePostList(int referUserId, int loginUserId) {
+		String query = "";
+		query += "select p.*, u.user_name, u.user_nickname,";
+		query += " case";
+		query += " when login_fa.favorite_post_id is null then false";
+		query += " else true";
+		query += " end as login_fav_flg,";
+		query += " case";
+		query += " when sh.share_post_id is null then false";
+		query += " else true";
+		query += " end as login_share_flg";
+		query += " from tm_post p";
+		//参照中のユーザIDでお気に入り情報を絞り込み
+		query += " inner join ts_favorite fa";
+		query += " on fa.favorite_user_id = " + referUserId;
+		query += " and p.post_id = fa.favorite_post_id";
+		//投稿者情報を取得するためユーザテーブルと結合
+		query += " inner join tm_user u";
+		query += " on p.post_user_id = u.user_id";
+		//ログインユーザがお気に入りに登録しているか否かを管理するフラグを取得
+		query += " left join ts_favorite login_fa";
+		query += " on login_fa.favorite_user_id = " + loginUserId;
+		query += " and p.post_id = login_fa.favorite_post_id";
+		//ログインユーザが共有しているか否かを管理するフラグを取得
+		query += " left join ts_share sh";
+		query += " on sh.share_user_id =" + loginUserId;
+		query += " and p.post_id = sh.share_post_id";
+		query += " order by p.post_ts";
+		
+		return (List<TmPostExt>) em.createNativeQuery(query, TmPostExt.class).getResultList();
+	}
+	
+	/*			 検索画面用			 */
+	
+	/**
+	 * 検索文字列をもとに投稿を検索する。
+	 * @param searchQuery 検索用文字列
+	 * @param loginUserId ログインユーザのID
+	 * @return 検索結果
+	 */
+	public List<TmPostExt> findSearchResults(String searchQuery, int loginUserId){
+		String query = "";
+		query += "select p.*, u.user_name, u.user_nickname,";
+		//ログインユーザ共有フラグ
+		query += " case";
+		query += "  when sh.share_post_id is null then false";
+		query += "  else true";
+		query += " end as login_share_flg,";
+		//ログインユーザお気に入りフラグ
+		query += " case";
+		query += "  when fav.favorite_post_id is null then false";
+		query += "  else true";
+		query += " end as login_fav_flg";
+		query += " from tm_post p";
+		//投稿者情報
+		query += " inner join tm_user u";
+		query += " on p.post_user_id = u.user_id";
+		//フラグ取得
+		query += " left join ts_share sh";
+		query += " on sh.share_user_id =" + loginUserId;
+		query += " and p.post_id = sh.share_post_id";
+		query += " left join ts_favorite fav";
+		query += " on fav.favorite_user_id =" + loginUserId;
+		query += " and p.post_id = fav.favorite_post_id";
+		//検索文字列による絞り込み　
+		query += " where p.post like '%" + searchQuery + "%'";
+		query += " order by p.post_ts";
+		
 		return (List<TmPostExt>) em.createNativeQuery(query, TmPostExt.class).getResultList();
 	}
 

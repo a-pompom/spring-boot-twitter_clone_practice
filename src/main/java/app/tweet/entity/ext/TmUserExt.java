@@ -30,6 +30,7 @@ public class TmUserExt {
 	private Integer postCount; //ユーザの投稿数
 	private Integer followCount; //ユーザのフォロー数
 	private Integer followerCount; //ユーザのフォロワー数
+	private Integer favoriteCount; //ユーザのお気に入り数
 
 	public TmUserExt() {
 		
@@ -122,6 +123,23 @@ public class TmUserExt {
 	public void setFollowerCount(Integer followerCount) {
 		this.followerCount = followerCount;
 	}
+
+	/**
+	 * @return the favoriteCount
+	 */
+	@Column(name = "favorite_count")
+	public Integer getFavoriteCount() {
+		return favoriteCount;
+	}
+
+	/**
+	 * @param favoriteCount the favoriteCount to set
+	 */
+	public void setFavoriteCount(Integer favoriteCount) {
+		this.favoriteCount = favoriteCount;
+	}
+	
+	
 	
 	
 	

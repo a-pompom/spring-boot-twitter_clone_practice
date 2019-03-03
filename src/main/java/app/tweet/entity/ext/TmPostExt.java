@@ -27,6 +27,10 @@ public class TmPostExt {
 	private Boolean deleteFlg;
 	private String userName;
 	private String userNickname;
+	//ログインユーザが投稿をお気に入り登録しているかを管理するフラグ
+	private Boolean loginUserFavFlg;
+	//ログインユーザが投稿を共有しているかを管理するフラグ
+	private Boolean loginUserShareFlg;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -97,6 +101,40 @@ public class TmPostExt {
 	public void setUserNickname(String userNickname) {
 		this.userNickname = userNickname;
 	}
+	/*			投稿者情報ここまで			*/
+	/*			 投稿のお気に入りフラグ			*/
+	/**
+	 * @return the loginUserFavFlg
+	 */
+	@Column(name = "login_fav_flg")
+	public Boolean getLoginUserFavFlg() {
+		return loginUserFavFlg;
+	}
+
+	/**
+	 * @param loginUserFavFlg the loginUserFavFlg to set
+	 */
+	public void setLoginUserFavFlg(Boolean loginUserFavFlg) {
+		this.loginUserFavFlg = loginUserFavFlg;
+	}
+
+	/**
+	 * @return the loginUserShareFlg
+	 */
+	@Column(name = "login_share_flg")
+	public Boolean getLoginUserShareFlg() {
+		return loginUserShareFlg;
+	}
+
+	/**
+	 * @param loginUserShareFlg the loginUserShareFlg to set
+	 */
+	public void setLoginUserShareFlg(Boolean loginUserShareFlg) {
+		this.loginUserShareFlg = loginUserShareFlg;
+	}
+	
+	
+	
 	
 	
 }
