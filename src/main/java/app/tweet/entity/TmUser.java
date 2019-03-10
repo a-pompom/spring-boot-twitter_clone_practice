@@ -28,6 +28,7 @@ public class TmUser implements java.io.Serializable {
 	private Date createTs;
 	private Date birthDate;
 	private Boolean deleteFlg;
+	private Integer profileImageId;
 
 	public TmUser() {
 	}
@@ -39,7 +40,7 @@ public class TmUser implements java.io.Serializable {
 	}
 
 	public TmUser(int userId, String userName, String password, String userNickname, String bio, Date lastLoginTs,
-			Date createTs, Date birthDate, Boolean deleteFlg) {
+			Date createTs, Date birthDate, Boolean deleteFlg, int profileImageId) {
 		this.userId = userId;
 		this.userName = userName;
 		this.password = password;
@@ -137,6 +138,17 @@ public class TmUser implements java.io.Serializable {
 		this.deleteFlg = deleteFlg;
 	}
 	
+	
+	@Column(name = "profile_image_id")
+	public Integer getProfileImageId() {
+		return profileImageId;
+	}
+
+	
+	public void setProfileImageId(Integer profileImageId) {
+		this.profileImageId = profileImageId;
+	}
+
 	/**
 	 * 永続化前に呼ばれるメソッド
 	 * デフォルト値を設定する
@@ -148,6 +160,10 @@ public class TmUser implements java.io.Serializable {
 	    if ( getDeleteFlg() == null )
 	    {
 	        setDeleteFlg(false);
+	    }
+	    
+	    if (getProfileImageId() == null){
+	    	setProfileImageId(0);
 	    }
 	}
 

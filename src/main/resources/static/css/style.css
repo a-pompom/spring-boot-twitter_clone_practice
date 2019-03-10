@@ -161,12 +161,26 @@ button, input[type=submit] {
   vertical-align: top;
 }
 
-.icon--middle:hover {
+.icon--small:hover, .icon--middle:hover, .icon--large:hover {
   opacity: 0.8;
 }
 
+.icon--small {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
 .icon--middle {
-  font-size: 5rem;
+  width: 50px;
+  height: 50px;
+  border-radiusu: 5%;
+}
+
+.icon--large {
+  width: 120px;
+  height: 120px;
+  border-radius: 10%;
 }
 
 .share__color {
@@ -220,12 +234,19 @@ button, input[type=submit] {
 .post-user {
   display: flex;
   justify-content: flex-start;
+  height: 30px;
 }
 
 .post-user__content {
   font-size: 1.6rem;
   line-height: 1.8;
   margin-right: 10px;
+}
+
+.post-text {
+  margin-top: 25px;
+  margin-left: 100px;
+  text-align: left;
 }
 
 .post-mention {

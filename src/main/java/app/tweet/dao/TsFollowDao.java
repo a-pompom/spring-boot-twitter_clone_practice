@@ -18,6 +18,29 @@ public class TsFollowDao extends BaseDao<TsFollow> {
 	EntityManager em;
 	
 	/**
+	 * ログインユーザが参照中のユーザをフォローしているかDBを検索する。　
+	 * @param referUserId　参照中のユーザID
+	 * @param loginUserId ログインユーザID 
+	 * @return フォロー中→Entity, フォロー中でない→null
+	 */
+	public TsFollow findByLoginAndReferUser(int referUserId, int loginUserId) {
+		String query = "";
+		query += "select * ";
+		query += " from ts_follow";
+		query += " where follow_user_id = " + loginUserId;
+		query += " and follower_user_id = " + referUserId;
+		
+		//TODO BaseDaoでfindSingleメソッドをつくって共通化したい。
+		List<TsFollow> followList = em.createNativeQuery(query, TsFollow.class).getResultList();
+		
+		if (followList.isEmpty()) {
+			return null;
+		}
+		
+		return followList.get(0);
+	}
+	
+	/**
 	 * 参照中のユーザがフォローしているユーザの一覧をユーザエンティティとして取得する。
 	 * @param referUserId 参照中のユーザID
 	 * @param loginUserId ログイン中のユーザID

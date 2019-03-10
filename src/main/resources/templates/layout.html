@@ -23,7 +23,9 @@
 			
 		</ul>
 		<div class="header__sub">
-			<a th:href="@{/__*{userName}__}" class="link--header"><i class="fas fa-smile"></i></a>
+			<a th:href="@{/__*{userName}__}" class="link--header">
+			<img th:src="@{__*{imagePath}__}" class="icon--small" width=25px height=25px>
+			</a>
 			<a th:href="@{/logout}" class="button--exit">ログアウト</a>
 		</div>
 	</header>

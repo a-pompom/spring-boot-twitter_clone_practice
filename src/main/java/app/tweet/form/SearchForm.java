@@ -10,6 +10,11 @@ public class SearchForm {
 	private String userName;
 	
 	/**
+	 * ログインユーザアイコンパス
+	 */
+	private String imagePath;
+	
+	/**
 	 *  検索文字列
 	 */
 	private String searchQuery;
@@ -59,6 +64,20 @@ public class SearchForm {
 	 */
 	public void setPostDto(PostDto postDto) {
 		this.postDto = postDto;
+	}
+
+	/**
+	 * @return the imagePath
+	 */
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	/**
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 	
 	

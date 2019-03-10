@@ -25,6 +25,7 @@ public class TmUserExt {
 	private String bio;
 	private Date createTs;
 	private Date birthDate;
+	private String imagePath;
 	
 	//ユーザ基本情報
 	private Integer postCount; //ユーザの投稿数
@@ -93,6 +94,16 @@ public class TmUserExt {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+	
+	@Column(name = "image_path")
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	
 	
 	/*			 ユーザプロフィールここまで 			*/
 	

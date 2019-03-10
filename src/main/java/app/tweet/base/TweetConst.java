@@ -7,6 +7,8 @@ package app.tweet.base;
  */
 public class TweetConst {
 	
+	public static final String IMAGE_FOLDER = "static/images/";
+	
 	/**
 	 * ユーザ画面で表示する情報を切り替えるための列挙型
 	 * @author aoi

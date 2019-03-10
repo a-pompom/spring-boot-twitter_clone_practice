@@ -9,22 +9,26 @@
 				<!--/* アイコン、フォローボタン */-->
 				<li>
 					<ul class="follow__user__content">
-						 <li class="icon--middle"><i class="fas fa-smile"></i></li>
-						 	<!--/* ログインユーザがフォロー中か否かでボタンの表示切り替え */-->
-							<th:block th:if="${followUser.loginFollowFlg}">
-								<li class="button--follow"><a th:href="@{/__${userName}__}">フォロー中</a></li>
+						 <li>
+						 	<a th:href="@{/__${followUser.userName}__}">
+						 	<img th:src="@{__*{imagePath}__}" class="icon--middle" width=50px height=50px>
+						 	</a>
+						 </li>
+						 <!--/* ログインユーザがフォロー中か否かでボタンの表示切り替え */-->
+						<th:block th:if="${followUser.loginFollowFlg}">
+							<li class="button--follow"><a th:href="@{/__${userName}__}">フォロー中</a></li>
+						</th:block>
+						<th:block th:unless="${followUser.loginFollowFlg}">
+							<!--/* ログインユーザ自身のときはフォローボタンを表示しない */-->
+							<th:block th:if="${followUser.userName} == *{userName}">
+								<li></li>
 							</th:block>
-							<th:block th:unless="${followUser.loginFollowFlg}">
-								<!--/* ログインユーザ自身のときはフォローボタンを表示しない */-->
-								<th:block th:if="${followUser.userName} == *{userName}">
-									<li></li>
-								</th:block>
-								<th:block th:unless="${followUser.userName} == *{userName}">
-									<li class="button--follow">
-										<a th:href="@{/user/__${followUser.userId}__/do_follow/__*{method}__}">フォロー</a>
-									</li>
-								</th:block>
+							<th:block th:unless="${followUser.userName} == *{userName}">
+								<li class="button--follow">
+									<a th:href="@{/user/__${followUser.userId}__/do_follow/__*{method}__}">フォロー</a>
+								</li>
 							</th:block>
+						</th:block>
 							
 					</ul> 
 				</li>

@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import app.tweet.form.SearchForm;
 import app.tweet.security.CustomUser;
+import app.tweet.service.ImageService;
 import app.tweet.service.MentionService;
 import app.tweet.service.SearchService;
 
@@ -35,6 +36,12 @@ public class SearchController {
 	MentionService mentionService;
 	
 	/**
+	 * イメージサービス
+	 */
+	@Autowired
+	ImageService imageService;
+	
+	/**
 	 * 初期化処理 検索文字列での検索結果を取得する。
 	 * @param form 検索画面用フォーム
 	 * @param attr リダイレクト用のModel
@@ -47,6 +54,7 @@ public class SearchController {
 		//フォームへ検索結果・ログインユーザ情報をセット
 		form.setPostDto(searchService.getSearchResults(searchString, customUser.getUserId()));
 		form.setUserName(customUser.getUsername());
+		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
 		
 		return "search";
 	}
@@ -55,7 +63,7 @@ public class SearchController {
 	 * 検索ボタン押下時に呼ばれる処理
 	 * 検索文字列をModelへ格納し、検索コントローラへリダイレクト
 	 * @param form ホーム画面用のフォーム
-	 * @param attr リダイレクトパラメータを利用するためのModel
+	 * @param attr リダイレクトパラメータを利用するためのフラッシュモデル
 	 * @return 検索画面の検索処理
 	 */
 	@RequestMapping(value = "/search")
@@ -71,11 +79,15 @@ public class SearchController {
 	 * 選択された投稿を共有する。
 	 * @param customUser セッションに格納されているログインユーザ情報
 	 * @param postUserId 選択された投稿のID
+	 * @param searchQuery 検索文字列
+	 * @param attr リダイレクトパラメータを利用するためのフラッシュモデル
 	 * @return ホーム画面
 	 */
-	@RequestMapping(value = "/share/{postId}")
-	private String share(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId) {
+	@RequestMapping(value = "/share/{postId}/{searchQuery}")
+	private String share(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId,
+						@PathVariable("searchQuery")String searchQuery, RedirectAttributes attr) {
 		mentionService.share(customUser.getUserId(), postId);
+		attr.addFlashAttribute("searchQueryString", searchQuery);
 		
 		return "redirect:/search/init";
 	}
@@ -84,11 +96,15 @@ public class SearchController {
 	 * 選択された投稿をお気に入りへ登録する。
 	 * @param customUser セッションに格納されているログインユーザ情報
 	 * @param postUserId 選択された投稿のID
+	 * @param searchQuery 検索文字列
+	 * @param attr リダイレクト時に利用するフラッシュモデル
 	 * @return ホーム画面　
 	 */
-	@RequestMapping(value = "/favorite/{postId}")
-	private String favorite(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId) {
+	@RequestMapping(value = "/favorite/{postId}/{searchQuery}")
+	private String favorite(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId,
+							@PathVariable("searchQuery")String searchQuery, RedirectAttributes attr) {
 		mentionService.favorite(customUser.getUserId(), postId);
+		attr.addFlashAttribute("searchQueryString", searchQuery);
 		
 		return "redirect:/search/init";
 	}

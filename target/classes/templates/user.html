@@ -2,15 +2,17 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<header th:replace="layout :: base_head('ユーザ')"></header>
 	<body>
-		<form name="user-form" th:action="@{/user/search}" th:object="${userForm}" method="post">
+		<form name="user-form" th:action="@{/user/search}" th:object="${userForm}" method="post" enctype="multipart/form-data">
 			
 			<header th:include="layout :: header(controller='user')" class="header"></header>
 	
 			<div class="user">
 	 
 				<ul class="user__headline">
-					<li class="user-icon">
-						<a href="user.html"><i class="fas fa-smile"></i></a>
+					<li class="user-icon" >
+						<a th:href="@{/__${referUser.userName}__}">
+						<img class="icon--large" th:src="@{__*{dto.imagePath}__}" width=120px height=120px>
+						</a>
 					</li>
 	
 					<!--/* ユーザ情報 */-->
@@ -37,12 +39,20 @@
 						</ul>
 					</li>
 					
+					<!--/* ユーザ情報編集ボタン */-->
 					<li class="user-button">
 					<th:block th:if="*{loggedInUser}">
 						<button type="submit" th:formaction="@{/user/editUser/__*{method}__}" class="button--edit">プロフィールを編集</button>
 					</th:block>
+					<!--/* フォローボタン */-->
+					<!--/* ログインユーザがフォローしているか否かで分岐 */-->
 					<th:block th:unless="*{loggedInUser}">
-						<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
+						<th:block th:if="*{loggedInFollowflg}">
+							<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー中</a>
+						</th:block>
+						<th:block th:unless="*{loggedInFollowflg}">
+							<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
+						</th:block>
 					</th:block>
 					
 					</li>
@@ -50,15 +60,31 @@
 				</ul>
 	 
 				<!--/* ユーザ基本情報 */-->
-				<div class="user__about">
-					<ul class="user__about__text">
-						<li><input type="text" th:field="*{dto.user.userNickname}" placeholder="ユーザ名"></li>
-						<li><input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID"></li>
-						<li><textarea th:field="*{dto.user.bio}" placeholder="自己紹介" cols="30" rows="10"></textarea></li>
-						<li th:text="*{dto.user.createTs}">登録日: 2019年1月</li>
-						<li th:text="*{dto.user.birthDate}">誕生日: 2000年1月1日</li>
-					</ul> 
-				</div>
+				<th:block th:if="*{loggedInUser}">
+					<div class="user__about">
+						<ul class="user__about__text">
+							<li><input type="text" th:field="*{dto.user.userNickname}" placeholder="ユーザ名"></li>
+							<li><input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID"></li>
+							<li><textarea th:field="*{dto.user.bio}" placeholder="自己紹介" cols="30" rows="10"></textarea></li>
+							<li th:text="*{dto.user.createTs}">登録日: 2019年1月</li>
+							<li th:text="*{dto.user.birthDate}">誕生日: 2000年1月1日</li>
+							<li><input type="file" th:field="*{profileImage}" />プロフィール画像をアップロード</li>
+						</ul> 
+					</div>
+				</th:block>
+				<th:block th:unless="*{loggedInUser}">
+					<div class="user__about">
+						<ul class="user__about__text">
+							<li th:text="${userForm.dto.user.userNickname}?: '名前はまだ決まっていません'"></li>
+							<li th:text="${userForm.dto.user.userName}"></li>
+							<li th:text="${userForm.dto.user.bio}?: '自己紹介はまだ登録されていません'"></li>
+							<li th:text="*{dto.user.createTs}">登録日: 2019年1月</li>
+							<li th:text="${userForm.dto.user.birthDate}?: '誕生日はまだ登録されていません'">誕生日: 2000年1月1日</li>
+							<li></li>
+						</ul> 
+					</div>
+				</th:block>
+				
 				
 				<!--/* URIの値に応じて表示項目を分岐 */-->
 				<!--/* 投稿 */-->

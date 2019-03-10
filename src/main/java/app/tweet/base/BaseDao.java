@@ -23,8 +23,8 @@ public class BaseDao<T> {
 	 * エンティティをDBへ登録する
 	 * @param entity DBへ登録する対象となるエンティティ
 	 */
-	public void saveOrUpdate(T entity) {
-		em.merge(entity);
+	public <T>T saveOrUpdate(T entity) {
+		return em.merge(entity);
 	}
 	
 

@@ -74,6 +74,20 @@ public class UserService {
 		return tmUserDao.findByUserName(userName);
 	}
 	
+	/**
+	 * ログイン中のユーザが参照中のユーザをフォローしているか判定。
+	 * @param referUserId 参照中のユーザID
+	 * @param loginUserId ログインユーザID
+	 * @return フォロー中→true, フォローしていない→false
+	 */
+	public Boolean isLoggedInFollowing(int referUserId, int loginUserId) {
+		if (tsFollowDao.findByLoginAndReferUser(referUserId, loginUserId) == null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/*			ユーザ関連のDto取得処理			*/
 	
 	/**
@@ -87,11 +101,12 @@ public class UserService {
 	
 	/**
 	 * ユーザの投稿情報を取得する
-	 * @param userId 参照中のユーザID
+	 * @param referUserId 参照中のユーザID
+	 * @param loginUserId ログインユーザのユーザID
 	 * @return ユーザの投稿情報
 	 */
-	public PostDto getUserPost(int userId) {
-		return convertToPostDto(tmPostDao.findTheUserExtPostList(userId));
+	public PostDto getUserPost(int referUserId, int loginUserId) {
+		return convertToPostDto(tmPostDao.findTheUserExtPostList(referUserId, loginUserId));
 	}
 	
 	/**
@@ -137,6 +152,7 @@ public class UserService {
 		UserDto dto = new UserDto();
 		//ログインユーザ名→Dto
 		dto.setUserName(userExt.getUserName());
+		dto.setImagePath(userExt.getImagePath());
 		//ユーザプロフィール情報→Dto
 		dto.setPostCount(userExt.getPostCount());
 		dto.setFollowCount(userExt.getFollowCount());
@@ -201,13 +217,14 @@ public class UserService {
 	 * @param dto ユーザDto
 	 */
 	@Transactional
-	public void editUser(UserDto dto) {
+	public void editUser(UserDto dto, int profileImageId) {
 		//既存のユーザEntityをフォームの入力値を格納したDtoで更新
 		TmUser entity = tmUserDao.findByUserName(dto.getUser().getUserName());
 		//カラム値セット処理
 		entity.setUserName(dto.getUser().getUserName());
 		entity.setUserNickname(dto.getUser().getUserNickname());
 		entity.setBio(dto.getUser().getBio());
+		entity.setProfileImageId(profileImageId);
 		
 		tmUserDao.saveOrUpdate(entity);
 	}

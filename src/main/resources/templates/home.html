@@ -8,7 +8,11 @@
 			<div class="home">
 			<!--/* 投稿欄 */-->
 				<ul class="post-form__main">
-					<li class="post-form__content"><a th:href="@{/__*{userName}__}" class="link--content"><i class="fas fa-smile"></i></a></li>
+					<li class="post-form__content">
+						<a th:href="@{/__*{userName}__}" class="link--content">
+						<img th:src="@{__*{imagePath}__}" class="icon--middle" width=50px height=50px>
+						</a>
+					</li>
 					<li class="post-form__content">
 						<input type="text" th:field="*{post.post}" placeholder="いまどうしてる？" class="field--post"></li>
 				</ul> 

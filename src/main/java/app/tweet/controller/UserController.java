@@ -1,5 +1,11 @@
 package app.tweet.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import app.tweet.base.BaseController;
+import app.tweet.base.TweetConst;
 import app.tweet.base.TweetConst.UserViewMethod;
 import app.tweet.entity.TmUser;
 import app.tweet.form.UserForm;
 import app.tweet.security.CustomUser;
+import app.tweet.service.ImageService;
 import app.tweet.service.MentionService;
 import app.tweet.service.UserService;
 
@@ -43,6 +51,12 @@ public class UserController extends BaseController{
 	 */
 	@Autowired
 	MentionService mentionService;
+	
+	/**
+	 * イメージサービス
+	 */
+	@Autowired
+	ImageService imageService;
 	
 	/**
 	 * 「ユーザ名/メソッド名」で遷移したときに呼ばれるメソッド
@@ -90,6 +104,8 @@ public class UserController extends BaseController{
 		//参照中のユーザ情報をセッションへ格納
 		model.addAttribute("referUser", user);
 		form.setUserName(customUser.getUsername());
+		form.setLoggedInFollowflg(userService.isLoggedInFollowing(user.getUserId(), customUser.getUserId()));
+		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
 		//フォームへユーザ情報・ユーザ投稿情報をセット
 		form.setLoggedInUser(customUser.getUserId() == user.getUserId() ? true : false);
 		form.setDto(userService.getUserProfile(user.getUserId()));
@@ -106,7 +122,7 @@ public class UserController extends BaseController{
 	private String setViewInfoByMethodURI(UserForm form, String[] userNameAndMethod, int referUserId, int loginUserId){
 		//userNameAndMethodのMethod部分が存在しない場合、投稿情報
 		if (userNameAndMethod.length < 3) {
-			form.setPostDto(userService.getUserPost(referUserId));
+			form.setPostDto(userService.getUserPost(referUserId, loginUserId));
 			form.setMethod("post");
 			return "user";
 		}
@@ -114,9 +130,11 @@ public class UserController extends BaseController{
 		String method = userNameAndMethod[2].toUpperCase();
 		UserViewMethod v;
 		v = UserViewMethod.valueOf(method);
+		
 		switch (v) {
 		case POST:
-			form.setPostDto(userService.getUserPost(referUserId));
+			//TODO 画像を取得する際に
+			form.setPostDto(userService.getUserPost(referUserId, loginUserId));
 			form.setMethod("post");
 			return "user";
 		case FAVORITE:
@@ -149,10 +167,30 @@ public class UserController extends BaseController{
 	@RequestMapping(value = "/user/editUser/{method}", method = RequestMethod.POST)
 	private String editUser(UserForm form, @AuthenticationPrincipal CustomUser user, 
 			@PathVariable("method")String method) {
-		userService.editUser(form.getDto());
+		if (form.getProfileImage().isEmpty()) {
+			//参照中の画面へ戻る
+			return "redirect:/" + user.getUsername() + "/" + method;
+		}
+		
+		try {
+			byte[] bytes = form.getProfileImage().getBytes();
+			int extLocation = form.getProfileImage().getOriginalFilename().lastIndexOf(".");
+			String imageName = TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation);
+			File tempFile = new File(imageName);
+		    tempFile.createNewFile();
+			Path path = Paths.get(TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation));
+			Files.write(path, bytes);
+			String imagePath = imageName.replace("static", "");
+			int profileImageId = imageService.saveImage(imagePath);
+			userService.editUser(form.getDto(), profileImageId);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		//参照中の画面へ戻る
 		return "redirect:/" + user.getUsername() + "/" + method;
+		
 	}
 	
 	
@@ -199,12 +237,13 @@ public class UserController extends BaseController{
 	 * @param postUserId 選択された投稿のID
 	 * @return
 	 */
-	@RequestMapping(value = "/user/favorite/{postId}")
+	@RequestMapping(value = "/user/favorite/{postId}/{method}")
 	private String favorite(@AuthenticationPrincipal CustomUser customUser,
-			@PathVariable("postId")int postId, @ModelAttribute("referUser")TmUser referUser) {
+			@PathVariable("postId")int postId, @PathVariable("method")String method,
+			@ModelAttribute("referUser")TmUser referUser) {
 		mentionService.favorite(customUser.getUserId(), postId);
 		
-		return "redirect:/" + referUser.getUserName() + "/" + "favorite";
+		return "redirect:/" + referUser.getUserName() + "/" + method;
 	}
 	
 	/**

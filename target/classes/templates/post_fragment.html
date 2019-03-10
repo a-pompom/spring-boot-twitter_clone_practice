@@ -6,13 +6,17 @@
 				<div class="post" th:each="post, i : *{postDto.postList}">
 				<!--/* ユーザ */-->
 				<ul class="post-user">
-					<li class="post-user__content"><a href="#" class="link--content"><i class="fas fa-smile"></i></a></li>
+					<li class="post-user__content">
+						<a th:href="@{/__${post.userName}__}" class="link--content">
+							<img th:src="@{__${post.imagePath}__}" class="icon--middle" width=50px height=50px>
+						</a>
+					</li>
 					<li th:text="${post.userNickname}" class="post-user__content">ユーザ名</li>
 					<li th:text="${post.userName}" class="post-user__content">ユーザID</li>
 					<li class="post-user__content">タイムスタンプ</li>
 				</ul>
 				<!--/* 本文 */-->
-				<p th:text="${post.post}">
+				<p th:text="${post.post}" class="post-text">
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse suscipit, odio ac auctor vehicula, mauris orci venenatis enim, a cursus mi arcu ac nunc. Vestibulum vel varius ex. Sed vitae mauris accumsan, gravida dolor sed, tristique libero. Sed sit amet urna ut metus semper ultricies. Morbi enim diam, feugiat non pulvinar eget, sagittis eleifend dui. Suspendisse semper sollicitudin magna eget placerat. Sed sed velit in felis eleifend tristique quis nec neque. Vivamus efficitur quis purus ut dictum. Donec ac mi elementum, convallis nunc eget, condimentum lectus.
 				</p>
 				<!--/* メンション */-->

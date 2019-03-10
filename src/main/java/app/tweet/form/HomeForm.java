@@ -26,6 +26,11 @@ public class HomeForm {
 	private String userName;
 	
 	/**
+	 * ログインユーザアイコンパス
+	 */
+	private String imagePath;
+	
+	/**
 	 * 検索文字列
 	 */
 	private String searchQuery;
@@ -86,6 +91,20 @@ public class HomeForm {
 	 */
 	public void setSearchQuery(String searchQuery) {
 		this.searchQuery = searchQuery;
+	}
+
+	/**
+	 * @return the imagePath
+	 */
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	/**
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	

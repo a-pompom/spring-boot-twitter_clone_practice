@@ -17,7 +17,7 @@
 						th:classappend="(${isLoginMentioned}? (${mentionType} + '__color') : '')"></i></a>
 				</th:block>
 				<th:block th:if="${controller} == 'search'">
-					<a th:href="@{/search/__${mentionType}__/__${post.postId}__}">
+					<a th:href="@{/search/__${mentionType}__/__${post.postId}__/__${searchQueryString}__}">
 					<i th:class="'fas' + ' ' +  ('fa-' + __${mentionIcon}__)" 
 						th:classappend="(${isLoginMentioned}? (${mentionType} + '__color') : '')"></i></a>
 				</th:block>							

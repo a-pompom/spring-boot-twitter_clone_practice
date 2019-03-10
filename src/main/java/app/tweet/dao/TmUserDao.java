@@ -47,10 +47,13 @@ public class TmUserDao extends BaseDao<TmUser>{
 		String query = "";
 		//ここではプロフィール情報としてユーザエンティティ、投稿数を取得
 		//パスワード、削除フラグといった画面に表示しない情報は取得しない
-		query += "select u.user_id, u.user_name, u.user_nickname, u.bio, u.create_ts, u.birth_date, ";
+		query += "select u.user_id, u.user_name, u.user_nickname, u.bio, u.create_ts, u.birth_date, i.image_name image_path,";
 		query += " coalesce(pc.post_count, 0) post_count, coalesce(fc.follow_count, 0) follow_count,";
 		query += " coalesce(fwc.follower_count, 0) follower_count, coalesce(favc.favorite_count, 0) favorite_count";
 		query += " from tm_user u";
+		//画像
+		query += " left join ts_image i";
+		query += " on u.profile_image_id = i.image_id";
 		//投稿数
 		query += " left join (";
 		query += " select p.post_user_id, count(*) post_count";

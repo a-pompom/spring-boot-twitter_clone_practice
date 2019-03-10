@@ -12,6 +12,7 @@ import app.tweet.entity.TmPost;
 import app.tweet.form.HomeForm;
 import app.tweet.security.CustomUser;
 import app.tweet.service.HomeService;
+import app.tweet.service.ImageService;
 import app.tweet.service.MentionService;
 
 /**
@@ -34,6 +35,9 @@ public class HomeController {
 	 */
 	@Autowired
 	private MentionService mentionService;
+	
+	@Autowired
+	private ImageService imageService;
 
 	/**
 	 * 初期化処理
@@ -47,6 +51,7 @@ public class HomeController {
 		form.setPostDto(homeService.findTheUserAndFollowPostList(customUser.getUserId()));
 		//ユーザ画面への遷移時に必要となるログインユーザ名をフォームへセット　
 		form.setUserName(customUser.getUsername());
+		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
 		//ログインユーザの入力した投稿情報を格納するEntity
 		form.setPost(new TmPost());
 		

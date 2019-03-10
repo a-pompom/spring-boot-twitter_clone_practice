@@ -1,5 +1,7 @@
 package app.tweet.form;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import app.tweet.dto.FollowDto;
 import app.tweet.dto.PostDto;
 import app.tweet.dto.UserDto;
@@ -32,9 +34,19 @@ public class UserForm {
 	private String userName;
 	
 	/**
+	 * ログインユーザアイコンパス
+	 */
+	private String imagePath;
+	
+	/**
 	 * 表示情報の種類(follow, favorite...
 	 */
 	private String method;
+	
+	/**
+	 * プロフィール画像
+	 */
+	private MultipartFile profileImage;
 	
 	/**
 	 * 検索用文字列
@@ -45,6 +57,11 @@ public class UserForm {
 	 * ログインユーザと参照中のユーザが一致するか
 	 */
 	private Boolean loggedInUser;
+	
+	/**
+	 * 参照中のユーザをフォローしているか
+	 */
+	private Boolean loggedInFollowflg;
 	
 	
 	/**
@@ -120,6 +137,23 @@ public class UserForm {
 		this.method = method;
 	}
 
+	
+	
+	
+	/**
+	 * @return the profileImage
+	 */
+	public MultipartFile getProfileImage() {
+		return profileImage;
+	}
+
+	/**
+	 * @param profileImage the profileImage to set
+	 */
+	public void setProfileImage(MultipartFile profileImage) {
+		this.profileImage = profileImage;
+	}
+
 	/**
 	 * @return the searchQuery
 	 */
@@ -132,6 +166,34 @@ public class UserForm {
 	 */
 	public void setSearchQuery(String searchQuery) {
 		this.searchQuery = searchQuery;
+	}
+
+	/**
+	 * @return the imagePath
+	 */
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	/**
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	/**
+	 * @return the loggedInFollowflg
+	 */
+	public Boolean getLoggedInFollowflg() {
+		return loggedInFollowflg;
+	}
+
+	/**
+	 * @param loggedInFollowflg the loggedInFollowflg to set
+	 */
+	public void setLoggedInFollowflg(Boolean loggedInFollowflg) {
+		this.loggedInFollowflg = loggedInFollowflg;
 	}
 	
 	

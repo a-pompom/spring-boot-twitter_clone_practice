@@ -24,6 +24,11 @@ public class UserDto {
 	private String userName;
 	
 	/**
+	 * プロフィール画像のパス
+	 */
+	private String imagePath;
+	
+	/**
 	 * 投稿数
 	 */
 	private Integer postCount;
@@ -42,7 +47,24 @@ public class UserDto {
 	 * お気に入り登録数
 	 */
 	private Integer favoriteCount;
+			
+
 	
+	
+	/**
+	 * @return the imagePath
+	 */
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	/**
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
 	/**
 	 * @return the user
 	 */

@@ -27,6 +27,7 @@ public class TmPostExt {
 	private Boolean deleteFlg;
 	private String userName;
 	private String userNickname;
+	private String imagePath;
 	//ログインユーザが投稿をお気に入り登録しているかを管理するフラグ
 	private Boolean loginUserFavFlg;
 	//ログインユーザが投稿を共有しているかを管理するフラグ
@@ -50,6 +51,18 @@ public class TmPostExt {
 
 	public void setPost(String post) {
 		this.post = post;
+	}
+	
+	
+
+	
+	@Column(name = "image_path")
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	@Column(name = "post_user_id")
