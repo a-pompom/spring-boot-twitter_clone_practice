@@ -7,10 +7,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import app.tweet.base.BaseEntity;
+
 @Entity
 @Table(name = "ts_image")
-public class TsImage {
+public class TsImage extends BaseEntity implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int imageId;
 	private String imageName;
 

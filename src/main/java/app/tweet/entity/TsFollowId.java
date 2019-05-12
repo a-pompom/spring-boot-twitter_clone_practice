@@ -10,6 +10,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TsFollowId implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int followUserId;
 	private int followerUserId;
 

@@ -3,12 +3,13 @@ package app.tweet.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import app.tweet.base.BaseDao;
 import app.tweet.entity.TsImage;
+import app.tweet.util.QueryBuilder;
 
 /**
  * 画像データを扱うDao
@@ -18,7 +19,7 @@ import app.tweet.entity.TsImage;
 @Component
 public class TsImageDao extends BaseDao<TsImage>{
 
-	@Autowired
+	@PersistenceContext
 	EntityManager em;
 	
 	/**
@@ -27,14 +28,15 @@ public class TsImageDao extends BaseDao<TsImage>{
 	 * @return アイコン情報エンティティ
 	 */
 	public TsImage findLoginIconPath(int loginUserId) {
-		String query = "";
-		query += "select coalesce(i.image_id, 0) image_id, coalesce(i.image_name, '/images/default.jpg') image_name ";
-		query += " from ts_image i";
-		query += " inner join tm_user u";
-		query += " on u.user_id = " + loginUserId;
-		query += " and i.image_id = u.profile_image_id";
+		QueryBuilder q = new QueryBuilder(em);
 		
-		List<TsImage> tempList = (List<TsImage>) em.createNativeQuery(query, TsImage.class).getResultList();
-		return tempList.get(0);
+		//未登録の場合はデフォルト画像を表示
+		q.append("select coalesce(i.image_id, 0) image_id, coalesce(i.image_name, '/images/default.jpg') image_name ");
+		q.append("from ts_image i");
+		q.append(" inner join tm_user u");
+		q.append(" on u.user_id = :userId").setParam("userId", loginUserId);
+		q.append(" and i.image_id = u.profile_image_id");
+		
+		return q.createQuery(TsImage.class).findSingle();
 	}
 }

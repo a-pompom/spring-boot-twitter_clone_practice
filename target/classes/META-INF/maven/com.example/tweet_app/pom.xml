@@ -66,6 +66,11 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-jdbc</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-validator</artifactId>
+    		<version>6.1.0.Alpha4</version>
+		</dependency>
 		
 	</dependencies>
 

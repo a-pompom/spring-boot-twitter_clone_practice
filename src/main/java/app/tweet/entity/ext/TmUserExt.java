@@ -10,13 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import app.tweet.base.BaseEntity;
+
 /**
  * ユーザ情報、投稿数を格納した拡張エンティティ
  * @author aoi
  *
  */
 @Entity
-public class TmUserExt {
+public class TmUserExt extends BaseEntity {
 	
 	//ユーザユーザプロフィール
 	private int userId;

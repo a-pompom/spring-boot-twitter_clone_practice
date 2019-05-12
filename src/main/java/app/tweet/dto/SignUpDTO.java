@@ -1,5 +1,7 @@
 package app.tweet.dto;
 
+import javax.validation.Valid;
+
 import app.tweet.entity.TmUser;
 
 /**
@@ -12,6 +14,7 @@ public class SignUpDto {
 	/**
 	 * ユーザ情報を格納したユーザエンティティ
 	 */
+	@Valid
 	private TmUser user;
 
 	/**ユーザ情報を取得する。

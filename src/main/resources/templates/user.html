@@ -62,7 +62,7 @@
 				<!--/* ユーザ基本情報 */-->
 				<th:block th:if="*{loggedInUser}">
 					<div class="user__about">
-						<ul class="user__about__text">
+						<ul class="user__about__text" id="toggleProfileEdit">
 							<li><input type="text" th:field="*{dto.user.userNickname}" placeholder="ユーザ名"></li>
 							<li><input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID"></li>
 							<li><textarea th:field="*{dto.user.bio}" placeholder="自己紹介" cols="30" rows="10"></textarea></li>

@@ -1,6 +1,7 @@
 package app.tweet.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -65,7 +67,22 @@ public class SignUpController {
 	 * @return 認証処理→ホーム画面へ遷移
 	 */
 	@RequestMapping("/save")
-	private ModelAndView save(HttpServletRequest request, SignUpForm form) {
+	private ModelAndView save(HttpServletRequest request,@Valid SignUpForm form, BindingResult result) {
+		//TODO パスワードの一致チェックはVue.jsでやりたい
+		//以下条件でバリデーション
+		/*ユーザID
+		 * ・空でない
+		 * ・ユニーク
+		 * ・半角英数及び「-_」のみで構成
+		 * ・32文字以下
+		 *パスワード
+		 * ・空でない
+		 * ・半角英数及び「-_」のみで構成
+		 * ・32文字以下
+		 */
+		if (result.hasErrors()) {
+			return new ModelAndView("sign-up");
+		}
 		signUpService.saveOrUpdate(form.getDto().getUser());
 		
 		return authWithAuthManager(request, form.getDto().getUser().getUserName(), form.getDto().getUser().getPassword());

@@ -113,7 +113,7 @@ public class HomeController {
 	}
 	
 	/**
-	 * コントローラ内で共通のサインアップフォームを生成。
+	 * コントローラ内で共通のホーム画面フォームを生成。
 	 * @return 生成されたフォームオブジェクト
 	 */
 	@ModelAttribute("homeForm")

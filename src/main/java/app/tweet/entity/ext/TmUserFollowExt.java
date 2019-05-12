@@ -6,13 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import app.tweet.base.BaseEntity;
+
 /**
  * 参照中のユーザのフォローユーザ情報、ログインユーザがフォローしているかのフラグを持つ拡張エンティティ
  * @author aoi
  *
  */
 @Entity
-public class TmUserFollowExt {
+public class TmUserFollowExt extends BaseEntity {
 	
 	//フォロー画面へ表示するユーザ情報
 	private int userId;

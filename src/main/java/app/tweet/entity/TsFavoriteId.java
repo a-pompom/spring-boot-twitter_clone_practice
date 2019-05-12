@@ -10,6 +10,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TsFavoriteId implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int favoriteUserId;
 	private int favoritePostId;
 

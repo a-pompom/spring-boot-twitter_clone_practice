@@ -12,13 +12,15 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import app.tweet.base.BaseEntity;
+
 /**
  * 投稿者情報を含めた投稿の拡張エンティティ
  * @author aoi
  *
  */
 @Entity
-public class TmPostExt {
+public class TmPostExt extends BaseEntity {
 
 	private int postId;
 	private String post;

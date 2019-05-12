@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <link rel="stylesheet" href="../css/normalize.css">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjapanese.css">
-        <title>ユーザ登録</title>
-    </head>
-    <body>
-        <!-- ヘッダ -->
-        <header class="header">
+	<head>
+		<link rel="stylesheet" href="../css/normalize.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjapanese.css">
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+		<title>ユーザ登録</title>
+	</head>
+	<body>
+		<!-- ヘッダ -->
+		<header class="header">
 
-            <div class="header__title">
-            <h2>Test</h2>
-            </div>
-            <div class="header__sub">
-            <a href="login.html" class="button--nav">ログイン</a>
-            <a href="#" class="button--nav">ユーザ登録</a>
-            </div>
+			<div class="header__title">
+			<h2>Test</h2>
+			</div>
+			<div class="header__sub">
+			<a href="login.html" class="button--nav">ログイン</a>
+			<a href="#" class="button--nav">ユーザ登録</a>
+			</div>
 
-        </header>
+		</header>
 
-        <!-- ユーザ登録 -->
-        <div class="login">
-            <form th:action="@{/sign-up/save}" class="login-form" th:object="${signUpForm}">
-                <p class="login__text">ユーザ登録</p>
-                <input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID" class="field--user_id">
-                <input type="password" th:field="*{dto.user.password}" placeholder="パスワード" class="field--password">
-                <input type="password" th:field="*{confirmPassword}" placeholder="パスワード(確認)" class="field--password">                
+		<!--/* ユーザ登録 */-->
+		<div class="login">
+			<form th:action="@{/sign-up/save}" class="login-form" th:object="${signUpForm}">
+				<p class="login__text">ユーザ登録</p>
+				<div>
+					<input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID" class="field--user_id">
+					<span th:if="${#fields.hasErrors('dto.user.userName')}" th:errors="*{dto.user.userName}"></span>
+				</div>
+				<!--/* パスワードが一致するか検証 */-->
+				<span id="passwordMatcher">
+					<input 
+						type="password" th:field="*{dto.user.password}" placeholder="パスワード" 
+						v-model:value="password" 
+						class="field--password">
+						
+					<input type="password" th:field="*{confirmPassword}" placeholder="パスワード(確認)"
+						v-model:value="confirmPassword" 
+						class="field--password">
 
-                <input type="submit" value="ユーザ登録" class="button--save">
-            </form> 
-        </div>
-    </body>
+					<input type="submit" value="ユーザ登録" 
+						v-bind:disabled="passwordMatched" 
+						v-bind:class="{'button--save': true, objDisabled: !passwordMatched}">
+				</span>				
+				
+			</form> 
+		</div>
+		
+		<script type="module" src="../js/Validator/passwordMatcher.js"></script>
+	</body>
 </html>

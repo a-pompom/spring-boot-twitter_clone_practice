@@ -1,5 +1,7 @@
 package app.tweet.form;
 
+import javax.validation.Valid;
+
 import app.tweet.dto.SignUpDto;
 
 /**
@@ -12,6 +14,7 @@ public class SignUpForm {
 	/**
 	 * ユーザ情報を格納したDTO
 	 */
+	@Valid
 	private SignUpDto dto;
 	
 	/**
