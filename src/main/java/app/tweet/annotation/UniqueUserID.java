@@ -11,9 +11,16 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmUserDao;
 
+/**
+ * サインアップ画面で入力されたユーザIDがユニークなものか検証する
+ * @author aoi
+ *
+ */
 @Constraint(validatedBy = UniqueUserID.UniqueUserIDValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -22,18 +29,25 @@ public @interface UniqueUserID {
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 	
+	@Component
 	public class UniqueUserIDValidator implements ConstraintValidator<UniqueUserID, String> {
 		
 		@Autowired
-		TmUserDao tmUserDao;
+		TmUserDao dao;
 		
 		@Override
 		public void initialize(UniqueUserID uniqueUserID) {
 		}
 		
+		/**
+		 * 入力されたユーザIDがユニークなものか検証する
+		 * ユニーク→true ユニークでない→false
+		 */
 		@Override
+		@Transactional
 		public boolean isValid(String userId, ConstraintValidatorContext cxt) {
-			if(tmUserDao.findByUserName(userId) == null) {
+			//DB上に存在しない場合はnullが返るため、nullチェックで検証
+			if(dao.findByUserName(userId) == null) {
 				return true;
 			};
 			return false;

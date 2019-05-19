@@ -32,9 +32,7 @@ let passwordMatcher = new Vue({
 				return false;
 			}
 			
-			//v-modelで書き換えられたプロパティはそのままでは比較できないので
-			//型は等価ではあるが、再度Stringへ変換して比較
-			if (stringUtil.isSameString(this.password, this.confirmPassword)) {
+			if (this.password === this.confirmPassword) {
 				return true;
 			}
 			return false;

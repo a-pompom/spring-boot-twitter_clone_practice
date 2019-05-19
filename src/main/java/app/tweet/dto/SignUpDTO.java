@@ -2,34 +2,76 @@ package app.tweet.dto;
 
 import javax.validation.Valid;
 
+import app.tweet.annotation.AuthInputType;
+import app.tweet.annotation.MaxLength;
+import app.tweet.annotation.NotEmpty;
+import app.tweet.annotation.UniqueUserID;
 import app.tweet.entity.TmUser;
 
 /**
  * ユーザ登録画面での入力情報を保持するためのDTO
+ * エンティティで直接アノテーションによるバリデーションを行うと、
+ * submit時、daoでのmerge時で2回実行され、かつdaoインスタンスを参照できなくなるので、
+ * バリデーションが必要な項目は個別に直接定義
  * @author aoi
  *
  */
 public class SignUpDto {
+	/**
+	 * ユーザID
+	 * 以下条件でバリデーション
+	 * ・必須
+	 * ・32文字以下制限
+	 * ・ユニーク
+	 * ・半角英数及びハイフン、アンダースコアのみ
+	 */
+	@NotEmpty(message = "ユーザIDを入力してください")
+	@UniqueUserID
+	@MaxLength(message = "ユーザIDは32文字以下で入力してください", maxLength = 32)
+	@AuthInputType
+	private String userId;
 	
 	/**
-	 * ユーザ情報を格納したユーザエンティティ
+	 * パスワード
+	 * 以下条件でバリデーション
+	 * ・必須
+	 * ・32文字以下制限
+	 * ・半角英数及びハイフン、アンダースコアのみ
 	 */
-	@Valid
-	private TmUser user;
+	@NotEmpty(message = "パスワードを入力してください")
+	@MaxLength(message = "パスワードは32文字以下で入力してください", maxLength = 32)
+	@AuthInputType
+	private String password;
 
-	/**ユーザ情報を取得する。
-	 * @return the user
+	/**
+	 * @return the userId
 	 */
-	public TmUser getUser() {
-		return user;
+	public String getUserId() {
+		return userId;
 	}
 
-	/**ユーザ情報をセットする。
-	 * @param user the user to set
+	/**
+	 * @param userId the userId to set
 	 */
-	public void setUser(TmUser user) {
-		this.user = user;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
 	
 	
 

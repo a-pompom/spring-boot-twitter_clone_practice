@@ -12,6 +12,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,7 +56,6 @@ public class SignUpController {
 		
 		//フォームの入力情報を格納するためのDTO・ユーザエンティティを生成
 		SignUpDto dto = new SignUpDto();
-		dto.setUser(new TmUser());
 		
 		//フォームへDTOをセット
 		form.setDto(dto);
@@ -80,12 +81,19 @@ public class SignUpController {
 		 * ・半角英数及び「-_」のみで構成
 		 * ・32文字以下
 		 */
+		//パスワード、確認用パスワードが一致しているかサーバサイド側でも念のため確認
+		if (!form.getDto().getPassword().equals(form.getConfirmPassword())) {
+			FieldError error = new FieldError("confirmPassword", "confirmPassword", "error");
+			result.addError(error);
+		}
+		
 		if (result.hasErrors()) {
 			return new ModelAndView("sign-up");
 		}
-		signUpService.saveOrUpdate(form.getDto().getUser());
 		
-		return authWithAuthManager(request, form.getDto().getUser().getUserName(), form.getDto().getUser().getPassword());
+		signUpService.saveOrUpdate(form.getDto());
+		
+		return authWithAuthManager(request, form.getDto().getUserId(), form.getDto().getPassword());
 	}
 	
 	/**

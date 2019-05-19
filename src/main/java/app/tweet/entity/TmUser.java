@@ -26,19 +26,9 @@ import app.tweet.base.BaseEntity;
 @Table(name = "tm_user")
 public class TmUser extends BaseEntity implements java.io.Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int userId;
-	@NotEmpty(message = "ユーザIDを入力してください")
-	@UniqueUserID
-	@MaxLength(message = "ユーザIDは32文字以下で入力してください", maxLength = 32)
-	@AuthInputType
 	private String userName;
-	@NotEmpty(message = "パスワードを入力してください")
-	@MaxLength(message = "パスワードは32文字以下で入力してください", maxLength = 32)
-	@AuthInputType
 	private String password;
 	private String userNickname;
 	private String bio;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmUserDao;
+import app.tweet.dto.SignUpDto;
 import app.tweet.entity.TmUser;
 
 /**
@@ -25,8 +26,22 @@ public class SignUpService {
 	 * @param user フォームの入力値をもとに生成されたユーザエンティティ
 	 */
 	@Transactional
-	public void saveOrUpdate(TmUser user) {
+	public void saveOrUpdate(SignUpDto dto) {
+		TmUser user = new TmUser();
+		
+		user.setUserName(dto.getUserId());
+		user.setPassword(dto.getPassword());
+		
 		dao.saveOrUpdate(user);
+	}
+	
+	@Transactional
+	public TmUser findByUserId(String userId) {
+		TmUser user = dao.findByUserName(userId);
+		if(user == null) {
+			return null;
+		};
+		return user;
 	}
 
 }

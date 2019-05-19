@@ -25,6 +25,9 @@ button, input[type=submit] {
   -moz-appearance: none;
   appearance: none; }
 
+input[type="file"] {
+  display: none; }
+
 .wrapper {
   display: flex; }
 
@@ -114,7 +117,7 @@ button, input[type=submit] {
 /*------------------------------*/
 /*FIELD                         */
 /*------------------------------*/
-.field--user_id, .field--password, .field--post {
+.field--user_id, .field--password, .field--post, .field--small {
   display: block;
   width: 250px;
   height: 40px;
@@ -129,6 +132,12 @@ button, input[type=submit] {
 .field--post {
   width: 600px;
   height: 200px; }
+
+.field--small {
+  widht: 120px;
+  height: 30px;
+  border-radius: 4px;
+  margin: 10px auto; }
 
 /*------------------------------*/
 /*LINK                          */
@@ -165,6 +174,27 @@ button, input[type=submit] {
 
 .favorite__color {
   color: blanchedalmond; }
+
+.prof-edit-dialog {
+  width: 40%;
+  height: 70%;
+  border: 1px solid #000; }
+
+.prof-edit__heading {
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px; }
+.prof-edit__label {
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-left: 15%;
+  margin-top: 2%;
+  margin-bottom: 5%; }
+.prof-edit__file {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer; }
+  .prof-edit__file__image {
+    border-radius: 50%; }
 
 /*------------------------------*/
 /*HEADER                        */

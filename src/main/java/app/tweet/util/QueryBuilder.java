@@ -121,7 +121,7 @@ public class QueryBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> T findSingle() {
-		//getSingleResultメソッドは結果セットが空の場合例外を投げ、処理が複雑となるので、
+		//EMで標準で用意されているgetSingleResultメソッドは結果セットが空の場合例外を投げ、処理が複雑となるので、
 		//getResultListの結果で分岐させる
 		List<T> result = this.query.getResultList();
 		if (result.isEmpty()) {

@@ -12,10 +12,10 @@
 		<header class="header">
 
 			<div class="header__title">
-			<h2>Test</h2>
+			<h2>Twitterっぽいやつ</h2>
 			</div>
 			<div class="header__sub">
-			<a href="login.html" class="button--nav">ログイン</a>
+			<a th:href="@{/}" class="button--nav">ログイン</a>
 			<a href="#" class="button--nav">ユーザ登録</a>
 			</div>
 
@@ -26,22 +26,23 @@
 			<form th:action="@{/sign-up/save}" class="login-form" th:object="${signUpForm}">
 				<p class="login__text">ユーザ登録</p>
 				<div>
-					<input type="text" th:field="*{dto.user.userName}" placeholder="ユーザID" class="field--user_id">
-					<span th:if="${#fields.hasErrors('dto.user.userName')}" th:errors="*{dto.user.userName}"></span>
+					<input type="text" th:field="*{dto.userId}" placeholder="ユーザID" class="field--user_id">
+					<span th:if="${#fields.hasErrors('dto.userId')}" th:errors="*{dto.userId}"></span>
 				</div>
 				<!--/* パスワードが一致するか検証 */-->
 				<span id="passwordMatcher">
 					<input 
-						type="password" th:field="*{dto.user.password}" placeholder="パスワード" 
-						v-model:value="password" 
+						type="password" th:field="*{dto.password}" placeholder="パスワード" 
+						v-model="password" 
 						class="field--password">
-						
+						<span th:if="${#fields.hasErrors('dto.password')}" th:errors="*{dto.password}"></span>
 					<input type="password" th:field="*{confirmPassword}" placeholder="パスワード(確認)"
-						v-model:value="confirmPassword" 
+						v-model="confirmPassword" 
 						class="field--password">
+						<span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
 
 					<input type="submit" value="ユーザ登録" 
-						v-bind:disabled="passwordMatched" 
+						v-bind:disabled="!passwordMatched" 
 						v-bind:class="{'button--save': true, objDisabled: !passwordMatched}">
 				</span>				
 				
