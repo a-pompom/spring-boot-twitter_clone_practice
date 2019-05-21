@@ -13,20 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import app.tweet.dto.SignUpDto;
-import app.tweet.entity.TmUser;
 import app.tweet.form.SignUpForm;
 import app.tweet.service.SignUpService;
 
 /**
  * ユーザ登録画面のコントローラ
  * @author aoi
- *
  */
 @RequestMapping("/sign-up")
 @Controller
@@ -44,9 +41,8 @@ public class SignUpController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
-	
 	/**
-	 * 初期処理 ユーザ情報を格納するためのDTO・ユーザエンティティを生成し、フォームへセット。
+	 * 初期処理 ユーザ情報を格納するためのDTOを生成し、フォームへセット。
 	 * @param form ユーザ登録フォーム
 	 * @param model リクエストスコープ　
 	 * @return ユーザ登録画面
@@ -68,8 +64,7 @@ public class SignUpController {
 	 * @return 認証処理→ホーム画面へ遷移
 	 */
 	@RequestMapping("/save")
-	private ModelAndView save(HttpServletRequest request,@Valid SignUpForm form, BindingResult result) {
-		//TODO パスワードの一致チェックはVue.jsでやりたい
+	private ModelAndView save(HttpServletRequest request, @Valid SignUpForm form, BindingResult result) {
 		//以下条件でバリデーション
 		/*ユーザID
 		 * ・空でない
@@ -80,6 +75,7 @@ public class SignUpController {
 		 * ・空でない
 		 * ・半角英数及び「-_」のみで構成
 		 * ・32文字以下
+		 * ・確認用パスワードと一致
 		 */
 		//パスワード、確認用パスワードが一致しているかサーバサイド側でも念のため確認
 		if (!form.getDto().getPassword().equals(form.getConfirmPassword())) {
@@ -87,6 +83,7 @@ public class SignUpController {
 			result.addError(error);
 		}
 		
+		//上記条件を満たさない場合、エラーメッセージをセットして画面へ遷移
 		if (result.hasErrors()) {
 			return new ModelAndView("sign-up");
 		}

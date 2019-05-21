@@ -1,12 +1,10 @@
 package app.tweet.dto;
 
-import javax.validation.Valid;
 
 import app.tweet.annotation.AuthInputType;
 import app.tweet.annotation.MaxLength;
 import app.tweet.annotation.NotEmpty;
 import app.tweet.annotation.UniqueUserID;
-import app.tweet.entity.TmUser;
 
 /**
  * ユーザ登録画面での入力情報を保持するためのDTO
@@ -14,7 +12,6 @@ import app.tweet.entity.TmUser;
  * submit時、daoでのmerge時で2回実行され、かつdaoインスタンスを参照できなくなるので、
  * バリデーションが必要な項目は個別に直接定義
  * @author aoi
- *
  */
 public class SignUpDto {
 	/**
