@@ -52,6 +52,7 @@ public class HomeController {
 		//ユーザ画面への遷移時に必要となるログインユーザ名をフォームへセット　
 		form.setUserName(customUser.getUsername());
 		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
+		
 		//ログインユーザの入力した投稿情報を格納するEntity
 		form.setPost(new TmPost());
 		
