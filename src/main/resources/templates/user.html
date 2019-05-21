@@ -88,7 +88,7 @@
 							
 							<div>
 								<label for="file-upload" class="prof-edit__file">
-									<img th:src="@{__*{dto.imagePath}__}" class="prof-edit__file__image">
+									<img th:src="@{__*{dto.imagePath}__}" width="80" height="80" class="prof-edit__file__image">
 								</label>
 								<input id="file-upload" type="file" th:field="*{profileImage}"/>
 							</div>
