@@ -7,14 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmPostDao;
-import app.tweet.dao.TsFavoriteDao;
-import app.tweet.dao.TsShareDao;
+
 import app.tweet.dto.PostDto;
 import app.tweet.entity.TmPost;
-import app.tweet.entity.TsFavorite;
-import app.tweet.entity.TsFavoriteId;
-import app.tweet.entity.TsShare;
-import app.tweet.entity.TsShareId;
 import app.tweet.entity.ext.TmPostExt;
 
 /**
@@ -30,18 +25,6 @@ public class HomeService {
 	 */
 	@Autowired
 	private TmPostDao tmPostDao;
-	
-	/**
-	 * 共有管理用のDao
-	 */
-	@Autowired
-	private TsShareDao tsShareDao;
-	
-	/**
-	 * お気に入り管理用のDao
-	 */
-	@Autowired
-	private TsFavoriteDao tsFavoriteDao;
 	
 	
 	/**

@@ -87,11 +87,30 @@ public class TmPostDao extends BaseDao<TmPost>{
 	 */
 	public List<TmPostExt> findTheUserAndFollowExtPostList(int loginUserId) {
 		QueryBuilder q = new QueryBuilder(em);
+		
+		q.append("with f as ( ");
+		q.append(" select follower_user_id");
+		q.append(" from ts_follow");
+		q.append(" where follow_user_id = :followUserId").setParam("followUserId", loginUserId);
+		
+		//ログインユーザのユーザIDを取得
+		//フォロー・フォロワーが0人の段階ではフォロー情報から自分自身を取得できないので、ユーザテーブルから取得
+		q.append(" union");
+		q.append(" select user_id");
+		q.append(" from tm_user");
+		q.append(" where user_id = :userId").setParam("userId", loginUserId);
+		
+		q.append(" ) "); 
+		
 		q.append("select p.*, i.image_name image_path,");
+		
+		// ログインユーザがお気に入りに登録しているか
 		q.append(" case");
 		q.append(" when fa.favorite_post_id is null then false");
 		q.append(" else true");
 		q.append(" end as login_fav_flg,");
+		
+		// ログインユーザが共有しているか
 		q.append(" case");
 		q.append(" when sh.share_post_id is null then false");
 		q.append(" else true");
@@ -104,17 +123,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 		
 		//指定のユーザIDがフォローしているユーザのID+自分自身のユーザID
 		q.append(" inner join(");
-		q.append(" select follower_user_id");
-		q.append(" from ts_follow");
-		q.append(" where follow_user_id = :followUserId").setParam("followUserId", loginUserId);
-		
-		//ログインユーザのユーザIDを取得
-		//フォロー・フォロワーが0人の段階ではフォロー情報から自分自身を取得できないので、ユーザテーブルから取得
-		q.append(" union");
-		q.append(" select user_id");
-		q.append(" from tm_user");
-		q.append(" where user_id = :userId").setParam("userId", loginUserId);
-		q.append(" ) f");
+		q.append(" select * from f ) f");
 		
 		//f.follower_user_idにfollow中のユーザID、自身のユーザIDが格納されているので、結合キーに指定し取得
 		q.append(" on p.post_user_id = f.follower_user_id");
@@ -124,16 +133,19 @@ public class TmPostDao extends BaseDao<TmPost>{
 		q.append(" on p.post_user_id = u.user_id");
 		
 		//共有情報をUNIONで縦結合
-		q.append(" union");
+		q.append(" union ");
 		q.append(" select sp.*, su.user_name, su.user_nickname, su.profile_image_id");
 		q.append(" from tm_post sp");
-		q.append(" inner join ts_share sh");
-		q.append(" on sh.share_user_id = :shareUserId").setParam("shareUserId", loginUserId);
-		q.append(" and sp.post_id = sh.share_post_id");
+		
+		// 共有投稿者情報
 		q.append(" inner join tm_user su");
 		q.append(" on sp.post_user_id = su.user_id");
-		q.append(" ) as p");
-		
+		q.append(" where sp.post_id in ( ");
+		q.append(" select share_post_id from ts_share ");
+		q.append(" where share_user_id in (");
+		q.append(" select follower_user_id from f ");
+		q.append(" ) )");
+		q.append("  ) as p ");
 		//画像
 		q.append(" left join ts_image i");
 		q.append(" on p.profile_image_id = i.image_id");

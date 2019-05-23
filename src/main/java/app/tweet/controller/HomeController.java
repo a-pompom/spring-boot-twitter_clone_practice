@@ -48,7 +48,12 @@ public class HomeController {
 	 */
 	@RequestMapping("/init")
 	private String init(HomeForm form, @AuthenticationPrincipal CustomUser customUser) {
+		//タイムライン情報として以下を取得 ※投稿には投稿者情報も含む
+		//・自分自身の投稿
+		//・フォローしているユーザの投稿
+		//・フォローしているユーザが共有した投稿
 		form.setPostDto(homeService.findTheUserAndFollowPostList(customUser.getUserId()));
+		
 		//ユーザ画面への遷移時に必要となるログインユーザ名をフォームへセット　
 		form.setUserName(customUser.getUsername());
 		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
