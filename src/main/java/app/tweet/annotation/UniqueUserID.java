@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import app.tweet.dao.TmUserDao;
 
 /**
- * サインアップ画面で入力されたユーザIDがユニークなものか検証する
+ * 入力されたユーザIDがユニークなものか検証する
  * @author aoi
  *
  */

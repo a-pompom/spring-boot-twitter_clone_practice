@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layout :: base_head('ログイン')"></head>
-    <body>
-        <!-- ヘッダ -->
-        <header class="header">
+	<head th:replace="layout :: base_head('ログイン')"></head>
+	<body>
+		<!--/* ヘッダ */-->
+		<header class="header">
 
-            <div class="header__title">
-            <h2>Twitterっぽいやつ</h2>
-            </div>
-            <div class="header__sub">
-            <a href="#" class="button--nav">ログイン</a>
-            <a th:href="@{/sign-up/init}" class="button--nav">ユーザ登録</a>
-            </div>
+			<div class="header__title">
+				<h2>Twitterっぽいやつ</h2>
+			</div>
+			<div class="header__sub">
+				<a href="#" class="button--nav">ログイン</a>
+				<a th:href="@{/sign-up/init}" class="button--nav">ユーザ登録</a>
+			</div>
 
-        </header>
+		</header>
 
-        <!-- ログイン -->
-        <div class="login">
-            <form th:action="@{/sign_in}" method="post" class="login-form">
-                <p class="login__text">ログイン</p>
-                <input type="text" name="userName" placeholder="ユーザID" class="field--user_id">
-                <input type="password" name="password" placeholder="パスワード" class="field--password">
+		<!--/* ログイン */-->
+		<div class="login">
+			<form th:action="@{/sign_in}" method="post" class="login-form">
+				<p class="login__text">ログイン</p>
+				<input type="text" name="userName" placeholder="ユーザID" class="field--user_id">
+				<input type="password" name="password" placeholder="パスワード" class="field--password">
 
-                <input type="submit" value="ログイン" class="button--save">
-            </form> 
-        </div>
-    </body>
+				<input type="submit" value="ログイン" class="button--save">
+			</form> 
+		</div>
+	</body>
 </html>

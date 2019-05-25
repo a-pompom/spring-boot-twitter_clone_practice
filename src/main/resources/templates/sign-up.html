@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<link rel="stylesheet" href="../css/normalize.css">
-		<link rel="stylesheet" href="../css/style.css">
-		<link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjapanese.css">
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-		<title>ユーザ登録</title>
-	</head>
+	<head th:replace="layout :: base_head('ユーザ登録')"></head>
+	
 	<body>
-		<!-- ヘッダ -->
+		<!--/* ヘッダ */-->
 		<header class="header">
 
 			<div class="header__title">
-			<h2>Twitterっぽいやつ</h2>
+				<h2>Twitterっぽいやつ</h2>
 			</div>
 			<div class="header__sub">
-			<a th:href="@{/}" class="button--nav">ログイン</a>
-			<a href="#" class="button--nav">ユーザ登録</a>
+				<a th:href="@{/}" class="button--nav">ログイン</a>
+				<a href="#" class="button--nav">ユーザ登録</a>
 			</div>
 
 		</header>
@@ -31,16 +26,20 @@
 				</div>
 				<!--/* パスワードが一致するか検証 */-->
 				<span id="passwordMatcher">
-					<input 
+					<!--/* パスワード */-->
+					<input
 						type="password" th:field="*{dto.password}" placeholder="パスワード" 
 						v-model="password" 
 						class="field--password">
 						<span th:if="${#fields.hasErrors('dto.password')}" th:errors="*{dto.password}"></span>
+						
+					<!--/* 確認用パスワード */-->
 					<input type="password" th:field="*{confirmPassword}" placeholder="パスワード(確認)"
 						v-model="confirmPassword" 
 						class="field--password">
 						<span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
 
+					<!--/* パスワードが一致しない場合はサブミット不可、非活性 */-->
 					<input type="submit" value="ユーザ登録" 
 						v-bind:disabled="!passwordMatched" 
 						v-bind:class="{'button--save': true, objDisabled: !passwordMatched}">

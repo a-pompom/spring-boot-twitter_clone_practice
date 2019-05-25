@@ -59,7 +59,7 @@ public class UserController extends BaseController{
 	ImageService imageService;
 	
 	/**
-	 * 「ユーザ名/メソッド名」で遷移したときに呼ばれるメソッド
+	 * 「ユーザID/メソッド名」で遷移したときに呼ばれるメソッド
 	 * 「.css」など静的リソースも拾ってしまうので、正規表現で除外
 	 * @param request URI
 	 * @param form ユーザフォーム
@@ -67,20 +67,20 @@ public class UserController extends BaseController{
 	 * @param customUser ログイン中のユーザ情報
 	 * @return ユーザ画面
 	 */
-	@RequestMapping(value = "/{regUserName:(?!^.$)|^[a-z0-9_]+$}/{regMethod:(?!^[.]+$)|^[a-z]+$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{regUserName:(?!^.$)|^[a-zA-Z0-9_-]+$}/{regMethod:(?!^[.]+$)|^[a-z]+$}", method = RequestMethod.GET)
 	private String initUserWithMethod(HttpServletRequest request, UserForm form, Model model,
 			@AuthenticationPrincipal CustomUser customUser) {
 		return initUser(request, form, model, customUser);
 	}
 	
 	/**
-	 * ユーザ名でGETリクエストが送信されたときに呼ばれるメソッド
+	 * ユーザIDでGETリクエストが送信されたときに呼ばれるメソッド
 	 * 指定されたユーザ名と対応したユーザのユーザ画面を表示する。
 	 * @param request リクエスト情報 ユーザ名、follow,favoriteのような処理情報をもつ
 	 * @param form ユーザフォーム
 	 * @return ユーザ画面
 	 */
-	@RequestMapping(value = "/{reg:(?!^[.]+$)|^[a-z0-9_]+$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{reg:(?!^[.]+$)|^[a-zA-Z0-9_-]+$}", method = RequestMethod.GET)
 	private String initUser(HttpServletRequest request, UserForm form, Model model,
 							@AuthenticationPrincipal CustomUser customUser) {
 		//TODO ユーザ名のサニタイズメソッドの実装
@@ -88,6 +88,7 @@ public class UserController extends BaseController{
 		//URIからユーザ名部分、処理部分を取得
 		String[] userNameAndMethod = unSafeUserName.split("/");
 		String userName = userNameAndMethod[1];
+		
 		//ログイン中でない場合はログイン画面へ飛ばす
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!auth.isAuthenticated()) {
@@ -106,6 +107,7 @@ public class UserController extends BaseController{
 		form.setUserName(customUser.getUsername());
 		form.setLoggedInFollowflg(userService.isLoggedInFollowing(user.getUserId(), customUser.getUserId()));
 		form.setImagePath(imageService.getLoginIconPath(customUser.getUserId()));
+		
 		//フォームへユーザ情報・ユーザ投稿情報をセット
 		form.setLoggedInUser(customUser.getUserId() == user.getUserId() ? true : false);
 		form.setDto(userService.getUserProfile(user.getUserId()));

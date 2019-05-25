@@ -29,19 +29,11 @@ public class SignUpService {
 	public void saveOrUpdate(SignUpDto dto) {
 		TmUser user = new TmUser();
 		
+		//DTO→Entity
 		user.setUserName(dto.getUserId());
 		user.setPassword(dto.getPassword());
 		
 		dao.saveOrUpdate(user);
-	}
-	
-	@Transactional
-	public TmUser findByUserId(String userId) {
-		TmUser user = dao.findByUserName(userId);
-		if(user == null) {
-			return null;
-		};
-		return user;
 	}
 
 }

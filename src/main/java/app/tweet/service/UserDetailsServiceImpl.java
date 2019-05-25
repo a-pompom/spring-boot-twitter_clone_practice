@@ -28,6 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	TmUserDao tmUserDao;
 	
+	/**
+	 * ログイン時に入力されたユーザIDをキーにユーザを検索する。
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		TmUser user = tmUserDao.findByUserName(userName);
@@ -48,9 +51,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		CustomUser customUser = new CustomUser(user.getUserName(), encoder.encode(user.getPassword()), grantList);
 		//セッションで管理するためDBの主キーとなるユーザIDを認証用ユーザオブジェクトへセット
 		customUser.setUserId(user.getUserId());
-		customUser.setReferUserName("");
-		customUser.setReferUser(new TmUser());
-		customUser.getReferUser().setUserId(16);
 		
 		//UserDetailsはインタフェースなので、Userクラスのコンストラクタで生成したユーザオブジェクトをキャスト
 		UserDetails userDetails = (UserDetails)customUser;

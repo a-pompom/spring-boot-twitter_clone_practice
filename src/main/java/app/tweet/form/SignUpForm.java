@@ -1,7 +1,6 @@
 package app.tweet.form;
 
 import javax.validation.Valid;
-
 import app.tweet.dto.SignUpDto;
 
 /**
