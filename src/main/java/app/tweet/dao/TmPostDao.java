@@ -14,6 +14,7 @@ import app.tweet.util.QueryBuilder;
 
 /**
  * 投稿情報を取得・登録するためのDao
+ * TODO クエリが長いからヘルパークラスを追加して共通部分はaddMentionみたいな形で切り出して行きたい
  * @author aoi
  *
  */
@@ -22,6 +23,54 @@ public class TmPostDao extends BaseDao<TmPost>{
 	
 	@PersistenceContext
 	EntityManager em;
+	
+	/**
+	 * 新規投稿を取得する
+	 * @param postId 新規投稿のID
+	 * @param loginUserId ログインユーザのID(新規投稿は投稿者 = ログインユーザとなる)
+	 * @return 新規投稿
+	 */
+	public TmPostExt findThePost(int postId, int loginUserId) {
+		QueryBuilder q = new QueryBuilder(em);
+		
+		q.append("select p.*, i.image_name image_path, ");
+		q.append(" case");
+		q.append(" when fa.favorite_post_id is null then false");
+		q.append(" else true");
+		q.append(" end as login_fav_flg,");
+		q.append(" case");
+		q.append(" when sh.share_post_id is null then false");
+		q.append(" else true");
+		q.append(" end as login_share_flg");
+		q.append(" from (");
+		
+		//ユーザの投稿＋ユーザの共有した投稿を取得
+		q.append(" select p.*, u.user_name, u.user_nickname, u.profile_image_id");
+		q.append(" from (");
+		q.append(" select * from tm_post where post_id = :postId ").setParam("postId", postId);
+		q.append(" ) p");
+		//投稿者情報
+		q.append(" inner join tm_user u");
+		q.append(" on p.post_user_id = u.user_id");
+		q.append(" ) as p");
+		
+		//画像
+		q.append(" left join ts_image i");
+		q.append(" on p.profile_image_id = i.image_id");
+		
+		//各々の投稿について、ログインユーザがお気に入りに登録しているか否かを管理するフラグを取得
+		q.append(" left join ts_favorite fa");
+		q.append(" on fa.favorite_user_id = :favoriteUserId").setParam("favoriteUserId", loginUserId);
+		q.append(" and p.post_id = fa.favorite_post_id");
+		
+		//ログインユーザが共有しているか否かを管理するフラグを取得
+		q.append(" left join ts_share sh");
+		q.append(" on sh.share_user_id = :loginShareUserId").setParam("loginShareUserId", loginUserId);
+		q.append(" and p.post_id = sh.share_post_id");
+		q.append(" order by p.post_ts desc");
+		
+		return q.createQuery(TmPostExt.class).findSingle();
+	}
 	
 	/**
 	 * ユーザ画面で表示する指定ユーザの投稿+投稿者情報を取得する

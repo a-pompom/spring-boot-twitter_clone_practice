@@ -2,27 +2,55 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<head th:replace="layout :: base_head('ホーム')"></head>
 	<body>
-		<form th:action="@{/home/save}" class="home__post-form" th:object="${homeForm}">
+		<form th:action="@{/home/save}" method="post" class="home__post-form" th:object="${homeForm}">
 			<header th:include="layout :: header(controller='home')" class="header"></header>
 			
 			<div class="home">
-			<!--/* 投稿欄 */-->
-				<ul class="post-form__main">
-					<li class="post-form__content">
-						<a th:href="@{/__*{userName}__}" class="link--content">
-						<img th:src="@{__*{imagePath}__}" class="icon--middle" width=50px height=50px>
-						</a>
-					</li>
-					<li class="post-form__content">
-						<input type="text" th:field="*{post.post}" placeholder="いまどうしてる？" class="field--post"></li>
-				</ul> 
-				<div class="post-form__sub">
-					<input type="submit" th:formaction="@{/home/save}" value="投稿" class="button--save">
+				<div class="home__title">
+					ホーム
 				</div>
-
-			<div th:replace="post_fragment :: post(controller='home')"></div>
+				<!--/* 投稿欄プレビュー */-->
+				<div id="postAdd">
+						<!--/* 領域をクリックするとダイアログ表示 */-->
+						<div class="post-area" id="post-add-area" v-on:click.capture="openDialog()">
+							<ul class="post-area__content">
+								<li class="post-area__content__icon">
+									<a class="link--content">
+										<img th:src="@{__*{imagePath}__}" class="icon--middle" width=55px height=55px>
+									</a>
+								</li>
+								<li class="post-area__content__form">
+									いまどうしてる？
+								</li>
+							</ul> 
+						</div>
+				</div>
+				
+				<!--/* 投稿欄 */-->
+				<div id="postDialogWrapper">
+					<dialog id="postDialog" v-click-outside:post-add-area="closeDialog" class="post-add-dialog">
+						<div class="post-add__heading">
+							<div v-on:click="closeDialog" class="post-add__heading__close">×</div>
+							<button th:attr="'v-on:click'='postSubmit(&quot;/home/save&quot;)'" type="button" class="button--post">
+								投稿
+							</button>
+						</div>
+							
+						<div class="post-add__post">
+							<img th:src="@{__*{imagePath}__}" class="post-add__post__image" width=85px height=85px>
+							
+							<textarea th:field="*{post.post}" placeholder="いまどうしてる？" class="post-add__post__post">
+							</textarea>
+						</div>
+					</dialog>
+				</div>
 			
+			<!--/* 投稿一覧 */-->
+			<div  th:replace="post_fragment :: post(controller='home')"></div>
 			</div>
 		</form>
+		
+		<script type="module" src="../js/dialog/postAdd.js"></script>
+		<script type="module" src="../js/dialog/postDialog.js"></script>
 	</body>
 </html>

@@ -30,7 +30,7 @@ public class QueryBuilder {
 	/**
 	 * クエリ文字列のリスト
 	 */
-	private List<String> queryStringList;
+	StringBuilder queryString;
 	
 	/**
 	 * パラメータのkey部分を保持するリスト
@@ -54,7 +54,7 @@ public class QueryBuilder {
 	 */
 	public QueryBuilder(EntityManager em) {
 		this.em = em;
-		this.queryStringList = new ArrayList<String>();
+		this.queryString = new StringBuilder();
 		this.paramNameList = new ArrayList<String>();
 		this.paramValueList = new ArrayList<Object>();
 	}
@@ -66,8 +66,8 @@ public class QueryBuilder {
 	 * @return QueryBuilder
 	 */
 	public QueryBuilder append(String inputQuery) {
-		this.queryStringList.add(inputQuery);
-		this.queryStringList.add(" ");
+		this.queryString.append(inputQuery);
+		this.queryString.append(" ");
 		return this;
 	}
 	
@@ -90,12 +90,6 @@ public class QueryBuilder {
 	 * @return 自身
 	 */
 	public QueryBuilder createQuery(Class<?> entityClass) {
-		//queryStringListからクエリ文字列を生成
-		StringBuilder queryString = new StringBuilder();
-		for (String queryInput : this.queryStringList) {
-			queryString.append(queryInput);
-		}
-		
 		this.query = this.em.createNativeQuery(queryString.toString(), entityClass);
 		//クエリ文字列の「:」プレースホルダが付与されたパラメータへ値を設定
 		for (int i = 0; i < this.paramNameList.size(); i++) {

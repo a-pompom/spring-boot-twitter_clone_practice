@@ -2,116 +2,139 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<header th:replace="layout :: base_head('ユーザ')"></header>
 	<body>
-		<form name="user-form" th:action="@{/user/search}" th:object="${userForm}" method="post" enctype="multipart/form-data">
+		<!--  <form name="user-form" th:action="@{/user/search}" th:object="${userForm}" method="post" enctype="multipart/form-data">
+		-->
+		<form name="user-form" th:action="@{/user/search}" th:object="${userForm}" method="post" enctype="multipart/form-data" >
 			
 			<header th:include="layout :: header(controller='user')" class="header"></header>
-	
-			<div class="user">
-	 
-				<ul class="user__headline">
-					<li class="user-icon" >
-						<a th:href="@{/__${referUser.userName}__}">
-						<img class="icon--large" th:src="@{__*{dto.imagePath}__}" width=120px height=120px>
-						</a>
-					</li>
-	
-					<!--/* ユーザ情報 */-->
-					<li class="user-info">
-						<ul class="user-info__content">
-							<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__}">投稿</a></li>
-							<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__}"
-								th:text="*{dto.postCount}">99</a></li>
-						</ul>
-						<ul class="user-info__content">
-							<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/following}">フォロー</a></li>
-							<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/following}"
-								th:text="*{dto.followCount}">99</a></li>
-						</ul>
-						<ul class="user-info__content">
-							<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/follower}">フォロワー</a></li>
-							<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/follower}"
-								th:text="*{dto.followerCount}">99</a></li>
-						</ul>
-						<ul class="user-info__content">
-							<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/favorite}">お気に入り</a></li>
-							<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/favorite}"
-								th:text="*{dto.favoriteCount}">99</a></li>
-						</ul>
-					</li>
-					
-					<!--/* ユーザ情報編集ボタン */-->
-					<li class="user-button">
-					<th:block th:if="*{loggedInUser}">
-						<!--/* 
-						<button type="submit" th:formaction="@{/user/editUser/__*{method}__}" class="button--edit">プロフィールを編集</button>
-						*/-->
-						<span id="profileEdit">
-							<button id="prof-edit-button" type="button" v-on:click="openDialog" class="button--edit">プロフィールを編集</button>							
-						</span>
-						
-					</th:block>
-					<!--/* フォローボタン */-->
-					<!--/* ログインユーザがフォローしているか否かで分岐 */-->
-					<th:block th:unless="*{loggedInUser}">
-						<th:block th:if="*{loggedInFollowflg}">
-							<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー中</a>
-						</th:block>
-						<th:block th:unless="*{loggedInFollowflg}">
-							<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
-						</th:block>
-					</th:block>
-					
-					</li>
-	
-				</ul>
-	 
-				<!--/* ユーザ基本情報 */-->				
-				<div class="user__about">
-					<ul class="user__about__text">
-						<li th:text="${userForm.dto.user.userNickname}?: '名前はまだ決まっていません'"></li>
-						<li th:text="${userForm.dto.user.userName}"></li>
-						<li th:text="${userForm.dto.user.bio}?: '自己紹介はまだ登録されていません'"></li>
-						<li th:text="*{dto.user.createTs}">登録日: 2019年1月</li>
-						<li th:text="${userForm.dto.user.birthDate}?: '誕生日はまだ登録されていません'">誕生日: 2000年1月1日</li>
-						<li></li>
-					</ul> 
-				</div>
-				
-				
-				
-				<!--/* ユーザ情報編集ダイアログ */-->
+			
+			<!--/* ユーザ情報編集ダイアログ */-->
 				<div id="profEditWrapper">
 					<dialog id="profEditDialog" v-click-outside:prof-edit-button="closeDialog" class="prof-edit-dialog">
-							<div class="prof-edit__heading">
-								<input th:formaction="@{/user/editUser/__*{method}__}" type="submit" value="プロフィールを更新" class="button--edit">
-							</div>
-							
-							<div>
+					
+						<div class="prof-edit__heading">
+							<div v-on:click="closeDialog" class="prof-edit__heading__close">×</div>
+							<button th:attr="'v-on:click'='profEdit(&quot;/user/editUser/__*{method}__&quot;)'" 
+									type="button" class="button--edit">
+								プロフィールを更新
+							</button>
+						</div>
+				
+						<div class="prof-edit__edit">
+				
+							<div class="prof-edit__edit__image">
 								<label for="file-upload" class="prof-edit__file">
-									<img th:src="@{__*{dto.imagePath}__}" width="80" height="80" class="prof-edit__file__image">
+								<img th:src="@{__*{dto.imagePath}__}" width="80" height="80" class="prof-edit__file__image">
 								</label>
 								<input id="file-upload" type="file" th:field="*{profileImage}"/>
 							</div>
-							
-							<div>
-								<label for="user-id" class="prof-edit__label">ユーザID</label>
+					
+							<div class="prof-edit__edit__username">
+								<label for="user-name" class="prof-edit__label">ユーザID</label>
 								<input type="text" th:field="*{dto.user.userName}" class="field--small">
-							</div>
-							
-							<div>
+								
 								<label for="user-nickname" class="prof-edit__label">ユーザ名</label>
 								<input type="text" th:field="*{dto.user.userNickname}" class="field--small">
 							</div>
-							
-							<div>
+						
+							<div class="prof-edit__edit__bio">
 								<label for="user-nickname" class="prof-edit__label">自己紹介</label>
-								<textarea th:field="*{dto.user.bio}" placeholder="自己紹介" cols="30" rows="7"></textarea>
+								<textarea placeholder="自己紹介" th:field="*{dto.user.bio}" class="bio-area">
+								</textarea>
 							</div>
-							
-					
-			
+						</div>
 				</dialog>
 				</div>
+			
+			<div class="user" id="userHTML">
+	 			
+	 			
+	 			<ul class="user-prof">
+	 				<li>
+	 					<ul class="user-prof__main">
+							<li class="user-prof__main-icon" >
+								<a th:href="@{/__${referUser.userName}__}">	
+								<img class="icon--large" th:src="@{__*{dto.imagePath}__}" width=120px height=120px>
+								</a>
+							</li>
+							
+							<li class="user-prof__main-button">
+								<!--/* ユーザ情報編集ボタン */-->
+								<th:block th:if="*{loggedInUser}">
+									<!--/* 
+									<button type="submit" th:formaction="@{/user/editUser/__*{method}__}" class="button--edit">プロフィールを編集</button>
+									*/-->
+									<span id="profileEdit">
+										<button id="prof-edit-button" type="button" v-on:click="openDialog" class="button--edit">プロフィールを編集</button>							
+									</span>
+									
+								</th:block>
+								<!--/* フォローボタン */-->
+								<!--/* ログインユーザがフォローしているか否かで分岐 */-->
+								<th:block th:unless="*{loggedInUser}">
+									<th:block th:if="*{loggedInFollowflg}">
+										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー中</a>
+									</th:block>
+									<th:block th:unless="*{loggedInFollowflg}">
+										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
+									</th:block>
+								</th:block>
+							
+							</li>
+	 					</ul>
+	 				</li>
+ 				
+	 				<li>
+	 					<ul class="user-prof__text">
+							<li th:text="${userForm.dto.user.userNickname}?: '名前はまだ決まっていません'" class="user-prof__text-name">
+								名前
+							</li>
+							<li th:text="${userForm.dto.user.userName}" class="user-prof__text-id">
+								user_id
+							</li>
+							<li th:text="${userForm.dto.user.bio}?: '自己紹介はまだ登録されていません'" class="user-prof__text-bio">
+								自己紹介
+							</li>
+							<li th:text="${userForm.dto.user.birthDate}?: '誕生日はまだ登録されていません'" class="user-prof__text-birth">
+								誕生日
+							</li>
+	 					</ul>
+	 				</li>
+ 				
+	 				<li>
+	 					<ul class="user-prof__headline">
+							<!--/* ユーザ情報 */-->
+							<li class="user-info">
+								<ul class="user-info__content">
+									<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__}">投稿</a></li>
+									<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__}"
+										th:text="*{dto.postCount}">99</a></li>
+								</ul>
+								<ul class="user-info__content">
+									<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/following}">フォロー</a></li>
+									<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/following}"
+										th:text="*{dto.followCount}">99</a></li>
+								</ul>
+								<ul class="user-info__content">
+									<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/follower}">フォロワー</a></li>
+									<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/follower}"
+										th:text="*{dto.followerCount}">99</a></li>
+								</ul>
+								<ul class="user-info__content">
+									<li class="user-info__content__sub"><a th:href="@{/__${referUser.userName}__/favorite}">お気に入り</a></li>
+									<li class="user-info__content__main"><a th:href="@{/__${referUser.userName}__/favorite}"
+										th:text="*{dto.favoriteCount}">99</a></li>
+								</ul>
+							</li>
+	 					</ul>
+	 				</li>
+ 				
+ 				
+ 			</ul>
+	 			
+				
+				
+				
 				
 				
 				
@@ -133,10 +156,6 @@
 	
 	</form>
 	
-	
-	
-	
-
 	<script type="module" src="../js/dialog/profileEdit.js"></script>
 	<script type="module" src="../js/dialog/profileEditDialog.js"></script>
 </body>

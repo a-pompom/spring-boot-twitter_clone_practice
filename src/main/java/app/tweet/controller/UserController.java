@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -159,6 +160,8 @@ public class UserController extends BaseController{
 		}
 	}
 	
+	
+	
 	/**
 	 *  フォームの入力値でユーザ情報を編集する
 	 * @param form ユーザフォーム
@@ -167,31 +170,36 @@ public class UserController extends BaseController{
 	 * @return 参照中の画面
 	 */
 	@RequestMapping(value = "/user/editUser/{method}", method = RequestMethod.POST)
-	private String editUser(UserForm form, @AuthenticationPrincipal CustomUser user, 
-			@PathVariable("method")String method) {
-		if (form.getProfileImage().isEmpty()) {
-			//参照中の画面へ戻る
-			return "redirect:/" + user.getUsername() + "/" + method;
-		}
+	private ResponseEntity<TmUser>  editUser(UserForm form, @AuthenticationPrincipal CustomUser user, 
+			@PathVariable("method")String method, Model model) {
 		
-		try {
-			byte[] bytes = form.getProfileImage().getBytes();
-			int extLocation = form.getProfileImage().getOriginalFilename().lastIndexOf(".");
-			String imageName = TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation);
-			File tempFile = new File(imageName);
-		    tempFile.createNewFile();
-			Path path = Paths.get(TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation));
-			Files.write(path, bytes);
-			String imagePath = imageName.replace("static", "");
-			int profileImageId = imageService.saveImage(imagePath);
-			userService.editUser(form.getDto(), profileImageId);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		model.addAttribute("userForm.dto.user.bio", form.getDto().getUser().getBio());
 		
-		//参照中の画面へ戻る
-		return "redirect:/" + user.getUsername() + "/" + method;
+		
+//		if (form.getProfileImage().isEmpty()) {
+//			//参照中の画面へ戻る
+//			return "redirect:/" + user.getUsername() + "/" + method;
+//		}
+		
+//		try {
+//			byte[] bytes = form.getProfileImage().getBytes();
+//			int extLocation = form.getProfileImage().getOriginalFilename().lastIndexOf(".");
+//			String imageName = TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation);
+//			File tempFile = new File(imageName);
+//		    tempFile.createNewFile();
+//			Path path = Paths.get(TweetConst.IMAGE_FOLDER + user.getUsername() + form.getProfileImage().getOriginalFilename().substring(extLocation));
+//			Files.write(path, bytes);
+//			String imagePath = imageName.replace("static", "");
+//			int profileImageId = imageService.saveImage(imagePath);
+//			
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		userService.editUser(form.getDto(), 0);
+		return ResponseEntity.ok(form.getDto().getUser());
+//		//参照中の画面へ戻る
+//		return "redirect:/" + user.getUsername() + "/" + method;		
 		
 	}
 	

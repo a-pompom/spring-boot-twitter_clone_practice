@@ -12,9 +12,8 @@ Vue.directive('click-outside', {
 		el.clickOutsideEvent = (event) => {
 			//領域外の対象から除外する要素
 			let excludeDOM = document.getElementById(binding.arg);
-			
 			//領域外がクリックされたか
-			if (!(el == event.target || el.contains(event.target)) && !(event.target === excludeDOM) ) {
+			if (!(el == event.target || el.contains(event.target)) && !(excludeDOM.contains(event.target)) )  {
 				//指定のイベントを紐付け
 				vnode.context[binding.expression](event);
 			}

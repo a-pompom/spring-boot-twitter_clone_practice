@@ -1,13 +1,18 @@
 package app.tweet.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import app.tweet.dto.PostDto;
 import app.tweet.entity.TmPost;
 import app.tweet.form.HomeForm;
 import app.tweet.security.CustomUser;
@@ -65,15 +70,25 @@ public class HomeController {
 	}
 	/**
 	 * フォームの入力情報・セッションをもとに投稿情報を生成し、DBへ登録する。
+	 * (非同期処理)
+	 * リクエスト: 投稿内容
+	 * レスポンス: 新規投稿をもとに生成された投稿のHTML
 	 * @param form フォーム
 	 * @param customUser  セッションへ格納されているログインユーザ情報
 	 * @return ホーム画面へのパス
 	 */
 	@RequestMapping(value= "/save")
-	private String save(HomeForm form, @AuthenticationPrincipal CustomUser customUser) {
-		homeService.save(form.getPost(), customUser.getUserId());
+	private String save(HomeForm form, @AuthenticationPrincipal CustomUser customUser, Model model) {
+		//入力内容をDBへ登録し、返り値のエンティティをもとに表示情報をDBから取得
+		TmPost newPost = homeService.save(form.getPost(), customUser.getUserId());
+		PostDto dto = homeService.findNewPost(newPost.getPostId(), customUser.getUserId());
 		
-		return "redirect:/home/init";
+		//レンダリングに必要な情報をリクエストスコープへセット
+		model.addAttribute("postDto", dto);
+		//メンション用
+		model.addAttribute("controller", "home");
+		
+		return "post_fragment :: post";
 	}
 	
 	/**
