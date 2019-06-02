@@ -1,3 +1,5 @@
+import * as axiosUtil from '../util/axiosUtil.js';
+
 /**
  * プロフィール編集ダイアログ
  */
@@ -19,28 +21,29 @@ let dialog = new Vue({
 			document.getElementById('profEditDialog').show();
 		},
 		
+		/**
+		 * プロフィールを更新する(非同期)
+		 */
 		profEdit(path) {
-			axios.defaults.headers['X-CSRF-TOKEN'] = this.token;
 			let bodyFormData = new FormData();
 			bodyFormData.set('dto.user.userName', document.getElementById('dto.user.userName').value);
 			bodyFormData.set('dto.user.userNickname', document.getElementById('dto.user.userNickname').value);
 			bodyFormData.set('dto.user.bio', document.getElementById('dto.user.bio').value);
-			//bodyFormData.set('profileImage', document.getElementsByName('profileImage').files[0]);
-			axios({
-				method: 'post',
-				url: path,
-				data: bodyFormData,
-				})
-				.then((response) => {
-					this.closeDialog();
-					//プロフィールは更新の影響範囲が広いので画面ごと更新
-					location.reload();
-				})
-				.catch((response) => {
-					console.log(response);
-				});
+			//画像が指定されなかった場合はリクエストに載せない
+			if (document.getElementById('file-upload').files[0]) {
+				bodyFormData.set('profileImage', document.getElementById('file-upload').files[0]);
+			}
 			
-			
+			let axiosParam = {
+					token: this.token,
+					path: path,
+					modDOMId: "",
+					emitEvent: "",
+					vm: this,
+					insertType: "reload",
+					bodyFormData: bodyFormData
+			};
+			axiosUtil.connect(axiosParam);
 		},
 		
 		/**

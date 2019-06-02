@@ -26,7 +26,7 @@
 								<label for="file-upload" class="prof-edit__file">
 								<img th:src="@{__*{dto.imagePath}__}" width="80" height="80" class="prof-edit__file__image">
 								</label>
-								<input id="file-upload" type="file" th:field="*{profileImage}"/>
+								<input id="file-upload" type="file" th:name="*{profileImage}" th:value="*{dto.imagePath}"/>
 							</div>
 					
 							<div class="prof-edit__edit__username">
@@ -61,9 +61,6 @@
 							<li class="user-prof__main-button">
 								<!--/* ユーザ情報編集ボタン */-->
 								<th:block th:if="*{loggedInUser}">
-									<!--/* 
-									<button type="submit" th:formaction="@{/user/editUser/__*{method}__}" class="button--edit">プロフィールを編集</button>
-									*/-->
 									<span id="profileEdit">
 										<button id="prof-edit-button" type="button" v-on:click="openDialog" class="button--edit">プロフィールを編集</button>							
 									</span>
@@ -73,10 +70,10 @@
 								<!--/* ログインユーザがフォローしているか否かで分岐 */-->
 								<th:block th:unless="*{loggedInUser}">
 									<th:block th:if="*{loggedInFollowflg}">
-										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー中</a>
+										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow--large">フォロー中</a>
 									</th:block>
 									<th:block th:unless="*{loggedInFollowflg}">
-										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
+										<a th:href="@{/user/__${referUser.userId}__/do_follow/__*{method}__}" class="button--follow--large">フォロー</a>
 									</th:block>
 								</th:block>
 							
@@ -132,16 +129,10 @@
  				
  			</ul>
 	 			
-				
-				
-				
-				
-				
-				
 				<!--/* URIの値に応じて表示項目を分岐 */-->
 				<!--/* 投稿 */-->
 				<th:block th:if="*{method} == 'post'">
-					<div th:replace="post_fragment :: post(controller='user')"></div>
+					<div th:replace="post_fragment :: post"></div>
 				</th:block>
 				<!--/* フォロー */-->
 				<th:block th:if="*{method} == 'following' or *{method} == 'follower'">
@@ -149,7 +140,7 @@
 				</th:block>
 				<!--/* お気に入り */-->
 				<th:block th:if="*{method} == 'favorite'">
-					<div th:replace="post_fragment :: post(controller='user')"></div>
+					<div th:replace="post_fragment :: post"></div>
 				</th:block>
 				
 		</div>
@@ -158,5 +149,6 @@
 	
 	<script type="module" src="../js/dialog/profileEdit.js"></script>
 	<script type="module" src="../js/dialog/profileEditDialog.js"></script>
+	<script type="module" src="../js/mention.js"></script>
 </body>
 </html>

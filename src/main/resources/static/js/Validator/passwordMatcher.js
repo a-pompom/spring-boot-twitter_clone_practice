@@ -1,5 +1,5 @@
 import * as stringUtil from '../util/stringUtil.js';
-
+//パスワードが一致するか否かを検証するためのVueインスタンス
 let passwordMatcher = new Vue({
 	el: "#passwordMatcher",
 	

@@ -34,7 +34,7 @@ public class HomeForm {
 	 * 検索文字列
 	 */
 	private String searchQuery;
-
+	
 	/**
 	 * @return the post
 	 */

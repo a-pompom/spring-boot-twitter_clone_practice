@@ -1,3 +1,5 @@
+import * as axiosUtil from '../util/axiosUtil.js';
+
 /**
  * 投稿ダイアログ
  */
@@ -25,27 +27,21 @@ let dialog = new Vue({
 		 * 新規投稿がDB・画面へ反映される
 		 */
 		postSubmit(path) {
-			axios.defaults.headers['X-CSRF-TOKEN'] = this.token;
+			
 			let bodyFormData = new FormData();
 			bodyFormData.set('post.post', document.getElementById('post.post').value);
-			let vm = this;
+			let axiosParam = {
+					token: this.token,
+					path: path,
+					modDOMId: "postList",
+					emitEvent: "postAdded",
+					vm: this,
+					insertType: "add",
+					bodyFormData: bodyFormData
+			}
+			axiosUtil.connect(axiosParam);
 			
-			axios({
-				method: 'post',
-				url: path,
-				data: bodyFormData,
-				})
-				.then((response) => {
-					//新規の投稿のHTMLは既存の投稿一覧のDOM要素の先頭にセット
-					let postList = document.getElementById('postList').innerHTML;
-					document.getElementById('postList').innerHTML = response.data + postList;
-					this.closeDialog();
-					
-				})
-				.catch((response)=> {
-					console.log(response);
-				});
-			
+			this.closeDialog();
 		},
 		
 		/**

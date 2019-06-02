@@ -20,9 +20,12 @@ a {
 ul {
   list-style: none; }
 
-button, input[type=submit] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
+button[type=submit] {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
   appearance: none; }
 
 textarea {
@@ -84,7 +87,7 @@ input[type="file"] {
 /*------------------------------*/
 /*BUTTON                        */
 /*------------------------------*/
-.button--save, .button--post, .button--nav, .button--exit, .button--edit, .button--follow {
+.button--save, .button--post, .button--nav, .button--exit, .button--edit, .button--follow, .button--follow--large {
   text-decoration: none;
   text-align: center;
   font-size: 1.3rem;
@@ -93,7 +96,7 @@ input[type="file"] {
   border-radius: 5px;
   display: inline-block;
   cursor: pointer; }
-  .button--save:hover, .button--post:hover, .button--nav:hover, .button--exit:hover, .button--edit:hover, .button--follow:hover {
+  .button--save:hover, .button--post:hover, .button--nav:hover, .button--exit:hover, .button--edit:hover, .button--follow:hover, .button--follow--large:hover {
     opacity: 0.8; }
 
 .button--save {
@@ -134,13 +137,20 @@ input[type="file"] {
   height: 40px;
   line-height: 1.9;
   font-size: 1.5rem;
-  background-color: #ffe1b2; }
+  background-color: #b2f0ff; }
 
 .button--follow {
   width: 80px;
   height: 24px;
   font-size: 1.0rem;
   line-height: 1.8;
+  background-color: #b2f0ff; }
+
+.button--follow--large {
+  width: 200px;
+  height: 40px;
+  font-size: 1.5rem;
+  line-height: 1.9;
   background-color: #b2f0ff; }
 
 /*------------------------------*/
@@ -501,19 +511,22 @@ input[type="file"] {
 /*FOLLOW                        */
 /*------------------------------*/
 .follow {
-  width: 70%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  line-height: 1.6; }
+  width: 65%;
+  line-height: 1.6;
+  margin: 0 auto; }
   .follow__user {
-    width: 25%;
-    height: 200px;
+    height: 100px;
     background-color: white;
     margin-left: 20px;
-    padding-left: 10px; }
-    .follow__user > :nth-child(2) {
+    padding-left: 10px;
+    border-bottom: 1px solid #d3d3d3; }
+    .follow__user__text > :nth-child(1) {
       font-weight: bold; }
+    .follow__user__text > :nth-child(2) {
+      color: #b3b3b3; }
+    .follow__user__text > :nth-child(3) {
+      display: inline-block;
+      margin: 10px 5px; }
     .follow__user__content {
       display: flex;
       justify-content: flex-start;

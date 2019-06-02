@@ -1,14 +1,10 @@
 package app.tweet.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,7 +14,6 @@ import app.tweet.form.HomeForm;
 import app.tweet.security.CustomUser;
 import app.tweet.service.HomeService;
 import app.tweet.service.ImageService;
-import app.tweet.service.MentionService;
 
 /**
  * ホーム画面を管理するコントローラ
@@ -36,11 +31,8 @@ public class HomeController {
 	private HomeService homeService;
 	
 	/**
-	 * メンションサービス
+	 * イメージサービス
 	 */
-	@Autowired
-	private MentionService mentionService;
-	
 	@Autowired
 	private ImageService imageService;
 
@@ -75,7 +67,8 @@ public class HomeController {
 	 * レスポンス: 新規投稿をもとに生成された投稿のHTML
 	 * @param form フォーム
 	 * @param customUser  セッションへ格納されているログインユーザ情報
-	 * @return ホーム画面へのパス
+	 * @param model レンダリングに必要な情報をリクエストスコープに載せるためのモデル
+	 * @return 投稿のHTMLをThymeleafでレンダリングでした結果が返る
 	 */
 	@RequestMapping(value= "/save")
 	private String save(HomeForm form, @AuthenticationPrincipal CustomUser customUser, Model model) {
@@ -84,37 +77,10 @@ public class HomeController {
 		PostDto dto = homeService.findNewPost(newPost.getPostId(), customUser.getUserId());
 		
 		//レンダリングに必要な情報をリクエストスコープへセット
-		model.addAttribute("postDto", dto);
-		//メンション用
-		model.addAttribute("controller", "home");
+		model.addAttribute("post", dto.getPostList().get(0));
 		
-		return "post_fragment :: post";
-	}
-	
-	/**
-	 * 選択された投稿を共有する。
-	 * @param customUser セッションに格納されているログインユーザ情報
-	 * @param postUserId 選択された投稿のID
-	 * @return ホーム画面
-	 */
-	@RequestMapping(value = "/share/{postId}")
-	private String share(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId) {
-		mentionService.share(customUser.getUserId(), postId);
 		
-		return "redirect:/home/init";
-	}
-	
-	/**
-	 * 選択された投稿をお気に入りへ登録する。
-	 * @param customUser セッションに格納されているログインユーザ情報
-	 * @param postUserId 選択された投稿のID
-	 * @return ホーム画面　
-	 */
-	@RequestMapping(value = "/favorite/{postId}")
-	private String favorite(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId) {
-		mentionService.favorite(customUser.getUserId(), postId);
-		
-		return "redirect:/home/init";
+		return "post_fragment :: thePost";
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package app.tweet.entity.ext;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -26,6 +27,7 @@ public class TmPostExt extends BaseEntity {
 	private String post;
 	private Integer postUserId;
 	private Date postTs;
+	private String postDateString;
 	private Boolean deleteFlg;
 	private String userName;
 	private String userNickname;
@@ -78,9 +80,10 @@ public class TmPostExt extends BaseEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
-	@Column(name = "post_ts", length = 29)
+	@Column(name = "post_ts")
 	public Date getPostTs() {
 		return this.postTs;
+		
 	}
 
 	public void setPostTs(Date postTs) {
@@ -146,6 +149,15 @@ public class TmPostExt extends BaseEntity {
 	 */
 	public void setLoginUserShareFlg(Boolean loginUserShareFlg) {
 		this.loginUserShareFlg = loginUserShareFlg;
+	}
+	
+	@Column(name = "post_date_string")
+	public String getPostDateString() {
+		return postDateString;
+	}
+
+	public void setPostDateString(String postDateString) {
+		this.postDateString = postDateString;
 	}
 	
 	

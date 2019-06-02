@@ -1,40 +1,52 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<head></head>
 	<body>
+		<div th:fragment="thePost" th:id="'thePost' + ${post.postId}" class="post">
+			<!--/* ユーザ */-->
+			<ul class="post-user">
+				<li class="post-user__content">
+					<a th:href="@{/__${post.userName}__}" >
+						<img th:src="@{__${post.imagePath}__}" class="icon--middle" width="50px" height="50px">
+					</a>
+				</li>
+				<li th:text="${post.userNickname}" class="post-user__content">ユーザ名</li>
+				<li th:text="${post.userName}" class="post-user__content">ユーザID</li>
+				<li th:text="${T(app.tweet.util.DateUtil).getPostTime(' __${post.postTs}__  ')}" class="post-user__content">タイムスタンプ</li>
+			</ul>
+					
+			<!--/* 本文 */-->
+			<p th:text="${post.post}" class="post-text">
+				本文
+			</p>
+					
+			<!--/* メンション */-->
+			<ul class="post-mention">
+				<li class="post-mention__content"><i class="fas fa-reply"></i></li>
+				<!--/* mentionType: share,favoriteといったメンションの内容 
+					   mentionIcon: メンションのアイコンクラス 
+					   isLoginMentioned ログインユーザがメンションを行ったか否かを管理するフラグ 
+					   postId 対象の投稿ID */-->
+				<!--/* 共有 */-->
+				<li 
+					th:replace="post_mention_fragment :: 
+								mention(mentionType = 'share', mentionIcon = 'sync',
+								 isLoginMentioned = __${post.loginUserShareFlg}__, postId = __${post.postId}__)"></li>
+				<!--/* お気に入り */-->
+				<li
+					th:replace="post_mention_fragment :: 
+								mention(mentionType = 'favorite', mentionIcon = 'star',
+								 isLoginMentioned = __${post.loginUserFavFlg}__, postId = __${post.postId}__)"></li>
+			</ul>
+		</div>
+	
 		<!--/* 投稿一覧 */-->
 			<div th:fragment="post" id="postList">
-				<div class="post" th:each="post, i : *{postDto.postList}">
-					<!--/* ユーザ */-->
-					<ul class="post-user">
-						<li class="post-user__content">
-							<a th:href="@{/__${post.userName}__}" class="link--content">
-								<img th:src="@{__${post.imagePath}__}" class="icon--middle" width=50px height=50px>
-							</a>
-						</li>
-						<li th:text="${post.userNickname}" class="post-user__content">ユーザ名</li>
-						<li th:text="${post.userName}" class="post-user__content">ユーザID</li>
-						<li class="post-user__content">タイムスタンプ</li>
-					</ul>
-					
-					<!--/* 本文 */-->
-					<p th:text="${post.post}" class="post-text">
-						本文
-					</p>
-					
-					<!--/* メンション */-->
-					<ul class="post-mention">
-						<li class="post-mention__content"><i class="fas fa-reply"></i></li>
-						<!--/* mentionType: share,favoriteといったメンションの内容 
-							   mentionIcon: メンションのアイコンクラス 
-							   isLoginMentioned ログインユーザがメンションを行ったか否かを管理するフラグ */-->
-						<li th:replace="post_mention_fragment :: 
-										mention(controller = __${controller}__, mentionType = 'share', mentionIcon = 'sync',
-										 isLoginMentioned = __${post.loginUserShareFlg}__)"></li>
-						<li th:replace="post_mention_fragment :: 
-										mention(controller = __${controller}__, mentionType = 'favorite', mentionIcon = 'star',
-										 isLoginMentioned = __${post.loginUserFavFlg}__)"></li>
-					</ul>
-				</div> 
+				<th:block th:each="post, i : *{postDto.postList}">
+					<div th:replace="post_fragment :: thePost"></div>
+				</th:block>
+				 
 			</div>
+			
+			
 	</body>
 </html>

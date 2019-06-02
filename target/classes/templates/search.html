@@ -2,16 +2,17 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<head th:replace="layout :: base_head('ホーム')"></head>
 	<body>
-		<form class="home__post-form" th:object="${searchForm}">
+		<form th:action="@{/search/}" class="home__post-form" th:object="${searchForm}" method="post">
 			<header th:include="layout :: header(controller='search')" class="header"></header>
 			
 			<div class="search" th:text="${searchQueryString}"></div>
 			
 			<div class="home">
 
-			<div th:replace="post_fragment :: post(controller='search')"></div>
+				<div th:replace="post_fragment :: post"></div>
 			
 			</div>
 		</form>
+		<script type="module" src="../js/mention.js"></script>
 	</body>
 </html>

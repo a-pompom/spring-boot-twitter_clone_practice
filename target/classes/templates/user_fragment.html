@@ -3,20 +3,28 @@
 	<body>
 		<!--/* フォロー */-->
 		<div th:fragment="follow" class="follow">
-		
+			<!--/* 非同期で切り替えるまではスタブで置いておくか */-->
+			<div id="postList"></div>
 			<!--/* フォローユーザリスト */-->
 			<ul class="follow__user" th:each="followUser, i : *{followDto.followList}">
-				<!--/* アイコン、フォローボタン */-->
 				<li>
 					<ul class="follow__user__content">
-						 <li>
-						 	<a th:href="@{/__${followUser.userName}__}">
-						 	<img th:src="@{__*{imagePath}__}" class="icon--middle" width=50px height=50px>
-						 	</a>
-						 </li>
+						<li>
+							<a th:href="@{/__${followUser.userName}__}">
+								<img th:src="@{__*{imagePath}__}" class="icon--middle" width=50px height=50px>
+							</a>
+						</li>
+						<li>
+							<ul class="follow__user__text">
+								<li th:text="${followUser.userNickname}" class="follow__user__content">ユーザ名</li>
+								<li th:text="${followUser.userName}" class="follow__user__content">ユーザID</li>
+								<li th:text="${followUser.bio}" class="follow__user__content">bio </li>
+							</ul>
+						</li>
+						
 						 <!--/* ログインユーザがフォロー中か否かでボタンの表示切り替え */-->
 						<th:block th:if="${followUser.loginFollowFlg}">
-							<li class="button--follow"><a th:href="@{/__${userName}__}">フォロー中</a></li>
+							<li><a th:href="@{/__${userName}__}" class="button--follow">フォロー中</a></li>
 						</th:block>
 						<th:block th:unless="${followUser.loginFollowFlg}">
 							<!--/* ログインユーザ自身のときはフォローボタンを表示しない */-->
@@ -24,19 +32,13 @@
 								<li></li>
 							</th:block>
 							<th:block th:unless="${followUser.userName} == *{userName}">
-								<li class="button--follow">
-									<a th:href="@{/user/__${followUser.userId}__/do_follow/__*{method}__}">フォロー</a>
+								<li>
+									<a th:href="@{/user/__${followUser.userId}__/do_follow/__*{method}__}" class="button--follow">フォロー</a>
 								</li>
 							</th:block>
 						</th:block>
-							
 					</ul> 
 				</li>
-				
-				<!--/* ユーザプロフィール */-->
-				<li th:text="${followUser.userNickname}" class="follow__user__content">ユーザ名<i class="fas fa-heart"></i></li>
-				<li th:text="${followUser.userName}" class="follow__user__content">ユーザID</li>
-				<li class="follow__user__content">Nulla pellentesque hendrerit erat, luctus egestas arcu ultrices ut. In hac habitasse platea dictumst. </li>
 			</ul>
 			
 		</div>

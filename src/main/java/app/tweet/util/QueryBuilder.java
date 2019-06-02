@@ -1,10 +1,17 @@
 package app.tweet.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import app.tweet.base.BaseEntity;
 
@@ -18,7 +25,6 @@ import app.tweet.base.BaseEntity;
  * ・結果セットをfindSingle/findResultListメソッドで取得
  * 
  * @author aoi
- *
  */
 public class QueryBuilder {
 	
@@ -68,6 +74,8 @@ public class QueryBuilder {
 	public QueryBuilder append(String inputQuery) {
 		this.queryString.append(inputQuery);
 		this.queryString.append(" ");
+		//コンソールでのクエリ確認用
+		System.out.println(inputQuery);
 		return this;
 	}
 	
@@ -95,7 +103,7 @@ public class QueryBuilder {
 		for (int i = 0; i < this.paramNameList.size(); i++) {
 			this.query.setParameter(this.paramNameList.get(i), this.paramValueList.get(i));
 		}
-		
+
 		//結果セット取得メソッドを続けて呼び出せるよう自身を返す
 		return this;
 	}
@@ -124,5 +132,4 @@ public class QueryBuilder {
 		
 		return result.get(0);
 	}
-
 }

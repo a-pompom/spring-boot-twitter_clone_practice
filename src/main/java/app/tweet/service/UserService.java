@@ -8,22 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.tweet.dao.TmPostDao;
 import app.tweet.dao.TmUserDao;
-import app.tweet.dao.TsFavoriteDao;
 import app.tweet.dao.TsFollowDao;
-import app.tweet.dao.TsShareDao;
 import app.tweet.dto.FollowDto;
 import app.tweet.dto.PostDto;
 import app.tweet.dto.UserDto;
 import app.tweet.entity.TmUser;
-import app.tweet.entity.TsFavorite;
-import app.tweet.entity.TsFavoriteId;
 import app.tweet.entity.TsFollow;
 import app.tweet.entity.TsFollowId;
-import app.tweet.entity.TsShare;
-import app.tweet.entity.TsShareId;
 import app.tweet.entity.ext.TmPostExt;
 import app.tweet.entity.ext.TmUserExt;
 import app.tweet.entity.ext.TmUserFollowExt;
+import app.tweet.util.DateUtil;
 
 /**
  * ユーザ画面を管理するサービス
@@ -50,18 +45,6 @@ public class UserService {
 	 */
 	@Autowired
 	private TsFollowDao tsFollowDao;
-	
-	/**
-	 * 共有情報Dao
-	 */
-	@Autowired
-	private TsShareDao tsShareDao;
-	
-	/**
-	 * お気に入り情報Dao
-	 */
-	@Autowired
-	private TsFavoriteDao tsFavoriteDao;
 	
 	//ユーザ投稿DTOを取得する処理
 	

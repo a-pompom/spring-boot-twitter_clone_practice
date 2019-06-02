@@ -5,7 +5,7 @@
 		<form th:action="@{/home/save}" method="post" class="home__post-form" th:object="${homeForm}">
 			<header th:include="layout :: header(controller='home')" class="header"></header>
 			
-			<div class="home">
+			<div class="home" id="app">
 				<div class="home__title">
 					ホーム
 				</div>
@@ -46,11 +46,12 @@
 				</div>
 			
 			<!--/* 投稿一覧 */-->
-			<div  th:replace="post_fragment :: post(controller='home')"></div>
+			<div  th:replace="post_fragment :: post"></div>
 			</div>
 		</form>
 		
 		<script type="module" src="../js/dialog/postAdd.js"></script>
 		<script type="module" src="../js/dialog/postDialog.js"></script>
+		<script type="module" src="../js/mention.js"></script>
 	</body>
 </html>
