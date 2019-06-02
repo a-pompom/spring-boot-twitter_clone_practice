@@ -23,6 +23,7 @@ public class BaseDao<T> {
 	 * エンティティをDBへ登録する
 	 * @param entity DBへ登録する対象となるエンティティ
 	 */
+	@SuppressWarnings("hiding")
 	public <T>T saveOrUpdate(T entity) {
 		return em.merge(entity);
 	}

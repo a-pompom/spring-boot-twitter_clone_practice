@@ -18,7 +18,6 @@ import app.tweet.entity.TsFollowId;
 import app.tweet.entity.ext.TmPostExt;
 import app.tweet.entity.ext.TmUserExt;
 import app.tweet.entity.ext.TmUserFollowExt;
-import app.tweet.util.DateUtil;
 
 /**
  * ユーザ画面を管理するサービス

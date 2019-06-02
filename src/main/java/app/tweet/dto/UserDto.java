@@ -1,10 +1,6 @@
 package app.tweet.dto;
 
-import java.util.List;
-
-import app.tweet.entity.TmPost;
 import app.tweet.entity.TmUser;
-import app.tweet.entity.ext.TmPostExt;
 
 /**
  * ユーザ情報を管理するためのDto

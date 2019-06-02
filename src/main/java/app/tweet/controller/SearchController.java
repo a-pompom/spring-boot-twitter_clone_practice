@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import app.tweet.form.SearchForm;
 import app.tweet.security.CustomUser;
 import app.tweet.service.ImageService;
-import app.tweet.service.MentionService;
 import app.tweet.service.SearchService;
 
 /**
@@ -28,12 +26,6 @@ public class SearchController {
 	 */
 	@Autowired
 	SearchService searchService;
-	
-	/**
-	 * メンションサービス
-	 */
-	@Autowired
-	MentionService mentionService;
 	
 	/**
 	 * イメージサービス
@@ -73,40 +65,6 @@ public class SearchController {
 		attr.addFlashAttribute("searchQueryString", unsafeQueryString);
 		return "redirect:/search/init";
 		
-	}
-	
-	/**
-	 * 選択された投稿を共有する。
-	 * @param customUser セッションに格納されているログインユーザ情報
-	 * @param postUserId 選択された投稿のID
-	 * @param searchQuery 検索文字列
-	 * @param attr リダイレクトパラメータを利用するためのフラッシュモデル
-	 * @return ホーム画面
-	 */
-	@RequestMapping(value = "/share/{postId}/{searchQuery}")
-	private String share(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId,
-						@PathVariable("searchQuery")String searchQuery, RedirectAttributes attr) {
-		mentionService.share(customUser.getUserId(), postId);
-		attr.addFlashAttribute("searchQueryString", searchQuery);
-		
-		return "redirect:/search/init";
-	}
-	
-	/**
-	 * 選択された投稿をお気に入りへ登録する。
-	 * @param customUser セッションに格納されているログインユーザ情報
-	 * @param postUserId 選択された投稿のID
-	 * @param searchQuery 検索文字列
-	 * @param attr リダイレクト時に利用するフラッシュモデル
-	 * @return ホーム画面　
-	 */
-	@RequestMapping(value = "/favorite/{postId}/{searchQuery}")
-	private String favorite(@AuthenticationPrincipal CustomUser customUser, @PathVariable("postId")int postId,
-							@PathVariable("searchQuery")String searchQuery, RedirectAttributes attr) {
-		mentionService.favorite(customUser.getUserId(), postId);
-		attr.addFlashAttribute("searchQueryString", searchQuery);
-		
-		return "redirect:/search/init";
 	}
 	
 	

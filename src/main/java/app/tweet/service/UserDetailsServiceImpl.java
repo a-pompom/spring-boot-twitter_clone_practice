@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import app.tweet.base.BaseObject;
 import app.tweet.dao.TmUserDao;
 import app.tweet.entity.TmUser;
 import app.tweet.security.CustomUser;

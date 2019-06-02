@@ -7,10 +7,13 @@ package app.tweet.base;
  */
 public class TweetConst {
 	
+	/**
+	 * 画像ファイル格納先
+	 */
 	public static final String IMAGE_FOLDER = "static/images/";
 	
 	/**
-	 * ユーザ画面のパスを管理する列挙型
+	 * ユーザ画面のパスを管理する列挙型 [/user/method]の形式のURLを「/」で分割した配列を参照するときに利用
 	 * @author aoi
 	 *
 	 */
