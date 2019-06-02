@@ -173,7 +173,7 @@ public class UserController extends BaseController{
 		//画像ファイルの更新＋ユーザの情報(文字列)を更新
 		try {
 			//画像ファイルをサーバ上に配置し、画面から取得するためのIDで紐付け
-			int profileImageId = imageService.saveImage(form.getProfileImage(), form.getUserName());
+			int profileImageId = imageService.saveImage(form.getProfileImage(), user.getUsername());
 			userService.editUser(form.getDto(), profileImageId);
 			
 		} catch (IOException e) {

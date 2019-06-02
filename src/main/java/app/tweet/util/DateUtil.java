@@ -54,6 +54,6 @@ public class DateUtil {
 			return Integer.toString((int)Math.ceil(diff / MINUTE)) + " m";
 		}
 		
-		return (int)diff + " sec";
+		return (int)diff + " s";
 	}
 }
