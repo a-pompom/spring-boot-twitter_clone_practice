@@ -32,6 +32,20 @@ public class TmUserDao extends BaseDao<TmUser>{
 	}
 	
 	/**
+	 * ユーザIDをキーにユーザを取得する。
+	 * @param userID 主キー
+	 * @return ユーザエンティティ
+	 */
+	public TmUser findByUserId(int userId) {
+		QueryBuilder q = new QueryBuilder(em);
+		
+		q.append("select * from tm_user where user_id = :userId ");
+		q.setParam("userId", userId);
+		
+		return q.createQuery(TmUser.class).findSingle();
+	}
+	
+	/**
 	 * ユーザ名をキーにユーザを取得する。
 	 * @param userName フォームへ入力されたユーザ名
 	 * @return ユーザエンティティ

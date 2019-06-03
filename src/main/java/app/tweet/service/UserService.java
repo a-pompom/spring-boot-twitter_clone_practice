@@ -199,16 +199,16 @@ public class UserService {
 	 * @param dto ユーザDto
 	 */
 	@Transactional
-	public void editUser(UserDto dto, int profileImageId) {
+	public TmUser editUser(UserDto dto, int profileImageId, int loginUserId) {
 		//既存のユーザEntityをフォームの入力値を格納したDtoで更新
-		TmUser entity = tmUserDao.findByUserName(dto.getUser().getUserName());
+		TmUser entity = tmUserDao.findByUserId(loginUserId);
 		//カラム値セット処理
 		entity.setUserName(dto.getUser().getUserName());
 		entity.setUserNickname(dto.getUser().getUserNickname());
 		entity.setBio(dto.getUser().getBio());
 		entity.setProfileImageId(profileImageId);
 		
-		tmUserDao.saveOrUpdate(entity);
+		return tmUserDao.saveOrUpdate(entity);
 	}
 	
 	

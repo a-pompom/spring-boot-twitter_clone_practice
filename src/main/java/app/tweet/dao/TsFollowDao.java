@@ -50,7 +50,7 @@ public class TsFollowDao extends BaseDao<TsFollow> {
 		QueryBuilder q = new QueryBuilder(em);
 		
 		//ユーザテーブルを参照中のユーザに関するフォロー情報で絞り込み
-		q.append("select u.user_id, u.user_name, u.user_nickname, u.bio,");
+		q.append("select u.user_id, u.user_name, u.user_nickname, u.bio, i.image_name image_path, ");
 		
 		//left joinの結果がnullでない場合はログインユーザがフォロー中のユーザとなる
 		q.append(" case");
@@ -70,6 +70,10 @@ public class TsFollowDao extends BaseDao<TsFollow> {
 		q.append(" on login_f.follow_user_id = :loginFollowUserId").setParam("loginFollowUserId", loginUserId);
 		q.append(" and login_f.follower_user_id = f.follower_user_id");
 		
+		//画像
+		q.append(" left join ts_image i");
+		q.append(" on u.profile_image_id = i.image_id");
+		
 		return q.createQuery(TmUserFollowExt.class).findResultList();
 	}
 	
@@ -83,7 +87,7 @@ public class TsFollowDao extends BaseDao<TsFollow> {
 		QueryBuilder q = new QueryBuilder(em);
 		
 		//ユーザテーブルを参照中のユーザに関するフォロー情報で絞り込み
-		q.append("select u.user_id, u.user_name, u.user_nickname, u.bio,");
+		q.append("select u.user_id, u.user_name, u.user_nickname, u.bio, i.image_name image_path, ");
 		
 		//left joinの結果がnullでない場合はログインユーザがフォロー中のユーザとなる
 		q.append(" case");
@@ -102,6 +106,10 @@ public class TsFollowDao extends BaseDao<TsFollow> {
 		q.append(" left join ts_follow login_f");
 		q.append(" on login_f.follow_user_id = :loginFollowerUserId").setParam("loginFollowerUserId", loginUserId);
 		q.append(" and login_f.follower_user_id = f.follow_user_id");
+		
+		//画像
+		q.append(" left join ts_image i");
+		q.append(" on u.profile_image_id = i.image_id");
 		
 		return q.createQuery(TmUserFollowExt.class).findResultList();
 	}

@@ -41,7 +41,8 @@ export function connect(param) {
 					break;
 				case "reload":
 					//プロフィールは更新の影響範囲が広いので画面ごと更新
-					location.reload();
+					// ユーザIDが変わった可能性があるので、ユーザIDでGETリクエスト
+					window.location.href = param.href;
 				default:
 					break;
 			}

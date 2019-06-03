@@ -41,7 +41,8 @@ let dialog = new Vue({
 					emitEvent: "",
 					vm: this,
 					insertType: "reload",
-					bodyFormData: bodyFormData
+					bodyFormData: bodyFormData,
+					href: document.getElementById('dto.user.userName').value
 			};
 			axiosUtil.connect(axiosParam);
 		},

@@ -32,7 +32,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 	public TmPostExt findThePost(int postId, int loginUserId) {
 		QueryBuilder q = new QueryBuilder(em);
 		
-		q.append("select p.*, i.image_name image_path, '' as post_date_string, ");
+		q.append("select p.*, i.image_name image_path, ");
 		// ログインユーザが共有・お気に入り登録しているか
 		TmPostDaoHelper.appendMentionConditional(q);
 		
@@ -67,7 +67,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 	public List<TmPostExt> findTheUserExtPostList(int referUserId, int loginUserId){
 		QueryBuilder q = new QueryBuilder(em);
 		
-		q.append("select p.*, i.image_name image_path, '' as post_date_string, ");
+		q.append("select p.*, i.image_name image_path, ");
 		// ログインユーザが共有・お気に入り登録しているか
 		TmPostDaoHelper.appendMentionConditional(q);
 		
@@ -133,7 +133,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 		q.append(" ) "); 
 		//with ここまで
 		
-		q.append("select p.*, i.image_name image_path, '' as post_date_string, ");
+		q.append("select p.*, i.image_name image_path, ");
 		
 		// ログインユーザが共有・お気に入り登録しているか
 		TmPostDaoHelper.appendMentionConditional(q);
@@ -189,7 +189,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 	public List<TmPostExt> findFavoritePostList(int referUserId, int loginUserId) {
 		QueryBuilder q = new QueryBuilder(em);
 		
-		q.append("select p.*, u.user_name, u.user_nickname, i.image_name image_path, '' as post_date_string, ");
+		q.append("select p.*, u.user_name, u.user_nickname, i.image_name image_path,  ");
 		// ログインユーザが共有・お気に入り登録しているか
 		TmPostDaoHelper.appendMentionConditional(q);
 		
@@ -227,7 +227,7 @@ public class TmPostDao extends BaseDao<TmPost>{
 	public List<TmPostExt> findSearchResults(String searchQuery, int loginUserId){
 		QueryBuilder q = new QueryBuilder(em);
 		
-		q.append("select p.*, u.user_name, u.user_nickname, i.image_name image_path, '' as post_date_string, ");
+		q.append("select p.*, u.user_name, u.user_nickname, i.image_name image_path, ");
 		// ログインユーザが共有・お気に入り登録しているか
 		TmPostDaoHelper.appendMentionConditional(q);
 		

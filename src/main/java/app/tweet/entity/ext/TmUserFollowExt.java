@@ -21,7 +21,7 @@ public class TmUserFollowExt extends BaseEntity {
 	private String userName;
 	private String userNickname;
 	private String bio;
-	
+	private String imagePath;
 	//ログインユーザが対象ユーザをフォローしているかどうかの状態を表すフラグ
 	private boolean loginFollowFlg;
 	
@@ -70,6 +70,14 @@ public class TmUserFollowExt extends BaseEntity {
 
 	public void setLoginFollowFlg(boolean loginFollowFlg) {
 		this.loginFollowFlg = loginFollowFlg;
+	}
+	@Column(name = "image_path")
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 	
 	

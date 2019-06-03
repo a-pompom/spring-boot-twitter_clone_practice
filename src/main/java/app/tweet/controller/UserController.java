@@ -6,9 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,6 +50,12 @@ public class UserController extends BaseController{
 	 */
 	@Autowired
 	ImageService imageService;
+	
+	/**
+	 * 変更されたユーザIDで認証を行うための機構
+	 */
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	/**
 	 * 「ユーザID/メソッド名」で遷移したときに呼ばれるメソッド
@@ -155,6 +164,8 @@ public class UserController extends BaseController{
 	/**
 	 *  フォームの入力値でユーザ情報を編集する(非同期)
 	 *  ユーザプロフィールの変更は影響範囲が大きいので、更新後には画面を再描画する
+	 *  また、画面を再描画する際にユーザIDが変わっていると再ログインが必要となってしまうので、
+	 *  変更後のユーザエンティティでログインし直し、変更後のユーザ画面へGETリクエストを送信する。　
 	 * @param form ユーザフォーム
 	 * @param user ログインユーザ
 	 * @param method 参照中の画面
@@ -162,11 +173,11 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "/user/editUser/{method}", method = RequestMethod.POST)
 	private ResponseEntity<?>  editUser(UserForm form, @AuthenticationPrincipal CustomUser user, 
-			@PathVariable("method")String method, Model model) {
+			@PathVariable("method")String method, Model model, HttpServletRequest request) {
 
 		//画像ファイルが無かった場合は画像は更新しない
 		if (form.getProfileImage() == null) {
-			userService.editUser(form.getDto(), imageService.getLoginIconId(user.getUserId()));
+			userService.editUser(form.getDto(), imageService.getLoginIconId(user.getUserId()), user.getUserId());
 			
 			return ResponseEntity.ok(null);
 		}
@@ -174,11 +185,25 @@ public class UserController extends BaseController{
 		try {
 			//画像ファイルをサーバ上に配置し、画面から取得するためのIDで紐付け
 			int profileImageId = imageService.saveImage(form.getProfileImage(), user.getUsername());
-			userService.editUser(form.getDto(), profileImageId);
+			TmUser modifiedUser = userService.editUser(form.getDto(), profileImageId, user.getUserId());
+			
+			//ユーザIDが切り替わった場合はログイン情報も切り替わるので、再ログイン
+			if (modifiedUser.getUserName() != user.getUsername()) {
+				UsernamePasswordAuthenticationToken authToken = 
+						new UsernamePasswordAuthenticationToken(modifiedUser.getUserName(), modifiedUser.getPassword());
+				authToken.setDetails(new WebAuthenticationDetails(request));
+				
+				//生成したトークンを利用してSpringSecurityの認証処理を呼び出し
+				Authentication authentication = authenticationManager.authenticate(authToken);
+				//ログイン中のユーザ情報をエンティティのユーザ情報で上書き
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		
 		return ResponseEntity.ok(null);		
 	}
